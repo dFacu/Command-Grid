@@ -18,7 +18,7 @@ public class GridGenerator : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3 pos = new Vector3(x * spacing, y * spacing, 0);
+                Vector3 pos = new Vector3(x * spacing, 0 ,y * spacing);
                 GameObject tile = Instantiate(tilePrefab, pos, Quaternion.identity);
                 tile.name = $"Tile_{x}_{y}";
                 tile.transform.parent = this.transform; // organiza en jerarquía
