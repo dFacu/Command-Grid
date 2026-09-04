@@ -5,31 +5,56 @@ public class TurnManager : MonoBehaviour
     public enum TurnState { PlayerTurn, EnemyTurn }
     public TurnState currentTurn = TurnState.PlayerTurn;
 
+    public float turnDuration = 30f;
+    private float turnTimer;
+
+    private void Start()
+    {
+        StartPlayerTurn();
+    }
     void Update()
     {
-        if (currentTurn == TurnState.PlayerTurn)
+        turnTimer -= Time.deltaTime;
+
+        if(turnTimer <= 0)
         {
-            // Aquí va la lógica del jugador
-            if (Input.GetKeyDown(KeyCode.Space)) // ejemplo: terminar turno con Space
-            {
+            if(currentTurn == TurnState.PlayerTurn)
                 EndPlayerTurn();
-            }
+            else if (currentTurn == TurnState.EnemyTurn)
+                EndEnemyTurn();
         }
-        else if (currentTurn == TurnState.EnemyTurn)
+        
+        if(currentTurn == TurnState.PlayerTurn && Input.GetKeyDown(KeyCode.Escape))
         {
-            // Aquí va la lógica de la IA enemiga
-            Debug.Log("Turno enemigo ejecutando...");
-            EndEnemyTurn();
+            EndPlayerTurn();
         }
+    }
+
+    void StartPlayerTurn()
+    {
+        currentTurn = TurnState.PlayerTurn;
+        turnTimer = turnDuration;
+        Debug.Log("Comienza turno del jugador");
     }
 
     void EndPlayerTurn()
     {
+        Debug.Log("Termina turno del jugador");
+        StartEnemyTurn();
+    }
+
+    void StartEnemyTurn()
+    {
         currentTurn = TurnState.EnemyTurn;
+        turnTimer = turnDuration;
+        Debug.Log("Comienza turno del enemigo");
+
+        Invoke("EndEnemyTurn", 2f);
     }
 
     void EndEnemyTurn()
     {
-        currentTurn = TurnState.PlayerTurn;
+        Debug.Log("Termina turno del enemigo");
+        StartPlayerTurn();
     }
 }
