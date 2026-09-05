@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7703243554301050342}
   - component: {fileID: 4146052544174957240}
+  - component: {fileID: 4569446811412836824}
   - component: {fileID: 3046799521305764327}
   - component: {fileID: 6150217459009436864}
   m_Layer: 0
@@ -42,6 +43,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5089332291960931758}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4569446811412836824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5089332291960931758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bfe8bdd2086649bda5b0b41633c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardManager
+  tilesParent: {fileID: 0}
+  origin: {x: 0, y: 0}
+  spacing: 1
 --- !u!23 &3046799521305764327
 MeshRenderer:
   m_ObjectHideFlags: 0

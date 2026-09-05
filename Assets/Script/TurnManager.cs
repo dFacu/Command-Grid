@@ -8,6 +8,9 @@ public class TurnManager : MonoBehaviour
     public float turnDuration = 30f;
     private float turnTimer;
 
+    public PlayerResources player;
+    public PlayerResources enemy;
+
     private void Start()
     {
         StartPlayerTurn();
@@ -32,29 +35,30 @@ public class TurnManager : MonoBehaviour
 
     void StartPlayerTurn()
     {
+        player.StartTurn(true);
+
         currentTurn = TurnState.PlayerTurn;
         turnTimer = turnDuration;
-        Debug.Log("Comienza turno del jugador");
     }
 
     void EndPlayerTurn()
     {
-        Debug.Log("Termina turno del jugador");
+        player.EndTurn();
         StartEnemyTurn();
     }
 
     void StartEnemyTurn()
     {
         currentTurn = TurnState.EnemyTurn;
+        enemy.StartTurn(false); // false = enemigo
         turnTimer = turnDuration;
-        Debug.Log("Comienza turno del enemigo");
 
         Invoke("EndEnemyTurn", 2f);
     }
 
     void EndEnemyTurn()
     {
-        Debug.Log("Termina turno del enemigo");
+        enemy.EndTurn();
         StartPlayerTurn();
     }
 }
