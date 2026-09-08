@@ -16,7 +16,7 @@ public class BoardManager : MonoBehaviour
 
     public Vector3 CellToWorld(Vector2Int cell)
     {
-        return new Vector3(origin.x + cell.x * spacing, origin.y + cell.y * spacing, 0f);
+        return new Vector3(cell.x * spacing, 0.5f, cell.y * spacing);
     }
 
     public bool IsCellFree(Vector2Int cell)
@@ -50,13 +50,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    // Nuevo método para registrar unidades en movimiento
     public void RegisterUnitAt(Vector2Int cell, GameObject unit)
     {
-        if (occupied.ContainsKey(cell))
-        {
-            Debug.Log("Celda ya ocupada, no se puede registrar otra unidad.");
-            return;
-        }
         occupied[cell] = unit;
     }
 }

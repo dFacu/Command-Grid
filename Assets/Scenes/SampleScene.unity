@@ -305,13 +305,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.27840862, y: -0, z: -0, w: 0.96046275}
-  m_LocalPosition: {x: 2.1, y: 3.5, z: -2.7}
+  m_LocalRotation: {x: 0.57183486, y: -0, z: -0, w: 0.82036877}
+  m_LocalPosition: {x: 2.1, y: 6.69, z: -0.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 32.331, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 69.757, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,10 +575,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2454af53937100f40972d1240a97660c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
+  commanderRedPrefab: {fileID: 3062425546180239302, guid: b41440028ecc5ed45922c3153c8e9cfe, type: 3}
+  commanderBluePrefab: {fileID: 3062425546180239302, guid: 0b3b40a27d2e39d448018ba260c56ea3, type: 3}
   currentTurn: 0
   turnDuration: 30
-  player: {fileID: 0}
-  enemy: {fileID: 0}
+  player: {fileID: 1715299877}
+  enemy: {fileID: 1391122059}
 --- !u!1 &1391122057
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,9 +626,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
   ownerName: Enemy
-  currentPoints: 2
+  currentPoints: 0
   maxPoints: 8
   turnNumber: 0
+--- !u!1 &1490458566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1490458568}
+  - component: {fileID: 1490458567}
+  m_Layer: 0
+  m_Name: BoardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1490458567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490458566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bfe8bdd2086649bda5b0b41633c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardManager
+  tilesParent: {fileID: 0}
+  origin: {x: 0, y: 0}
+  spacing: 1
+--- !u!4 &1490458568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490458566}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.30961, y: -0, z: -0.25101}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559418534
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,7 +867,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1715299875}
-  - component: {fileID: 1715299876}
   - component: {fileID: 1715299877}
   m_Layer: 0
   m_Name: Player
@@ -842,21 +890,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1715299876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715299874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa52809b56d3be34e9e666ad061efbce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HandUI
-  handPanel: {fileID: 83078262}
-  cardButtonPrefab: {fileID: 3245261670421411877, guid: ddd68935bc600ea4286fe8fb5e674390, type: 3}
-  pointsSystem: {fileID: 1715299877}
 --- !u!114 &1715299877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,18 +903,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
   ownerName: Jugador
-  currentPoints: 2
+  currentPoints: 0
   maxPoints: 5
   turnNumber: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1490458568}
+  - {fileID: 1037255573}
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 1709473208}
   - {fileID: 1559418537}
-  - {fileID: 1037255573}
   - {fileID: 1715299875}
   - {fileID: 1391122058}
   - {fileID: 406485953}

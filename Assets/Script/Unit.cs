@@ -18,19 +18,11 @@ public class Unit : MonoBehaviour
 
     public void MoveTo(Vector2Int targetCell)
     {
-        // Validar rango de movimiento
         int distance = Mathf.Abs(targetCell.x - currentCell.x) + Mathf.Abs(targetCell.y - currentCell.y);
         if (distance <= movementRange && BoardManager.Instance.IsCellFree(targetCell))
         {
-            // Liberar celda actual
-            BoardManager.Instance.RemoveUnitAt(currentCell);
-
-            // Actualizar posición
             transform.position = BoardManager.Instance.CellToWorld(targetCell);
             currentCell = targetCell;
-
-            // Registrar nueva celda ocupada
-            BoardManager.Instance.RegisterUnitAt(targetCell, gameObject);
         }
         else
         {
@@ -47,6 +39,11 @@ public class Unit : MonoBehaviour
             BoardManager.Instance.RemoveUnitAt(currentCell);
             Destroy(gameObject);
         }
+    }
+
+    public Vector2Int GetCurrentCell()
+    {
+        return currentCell;
     }
 }
 
