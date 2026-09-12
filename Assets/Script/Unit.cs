@@ -8,25 +8,33 @@ public class Unit : MonoBehaviour
     public int attack = 2;
     public int movementRange = 1;   // cuántas celdas puede moverse por turno
 
+
+    public bool hasMovedThisTurn;
+
+
     private Vector2Int currentCell;
 
-    public void Initialize(PlayerResources ownerRef, Vector2Int startCell)
+    public void Initialize(PlayerResources ownerRef) {  owner = ownerRef; }
+
+    public void MoveTo(Vector3 cell)
     {
-        owner = ownerRef;
-        currentCell = startCell;
+        Vector3 pos = new Vector3(cell.x, 0.5f, cell.z);
+
+        transform.position = pos;
     }
 
-    public void MoveTo(Vector2Int targetCell)
+    public void Attack(Unit target)
     {
-        int distance = Mathf.Abs(targetCell.x - currentCell.x) + Mathf.Abs(targetCell.y - currentCell.y);
-        if (distance <= movementRange && BoardManager.Instance.IsCellFree(targetCell))
+        if (target == null) return;
+
+        target.health -= attack;
+        Debug.Log($"{name} atacó a {target.name}, vida restante: {target.health}");
+
+        if (target.health <= 0)
         {
-            transform.position = BoardManager.Instance.CellToWorld(targetCell);
-            currentCell = targetCell;
-        }
-        else
-        {
-            Debug.Log("Movimiento inválido");
+            BoardManager.Instance.RemoveUnitAt(target.GetCurrentCell());
+            Destroy(target.gameObject);
+            Debug.Log($"{target.name} fue derrotado!");
         }
     }
 

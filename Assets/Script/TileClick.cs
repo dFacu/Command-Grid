@@ -1,20 +1,31 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TileClick : MonoBehaviour
+public class TileClick : MonoBehaviour, IPointerClickHandler
 {
-    public Vector2Int cellCoords; // coordenadas lógicas del tile
+    public Vector3 cellCoords; // coordenadas lógicas del tile
+    public bool occupied = false;
 
-    private void OnMouseDown()
+    private void Start()
     {
-        // Solo permitir movimiento en turno del jugador
-        if (TurnManager.Instance.currentTurn != TurnManager.TurnState.PlayerTurn) return;
+        cellCoords = transform.position;
+    }
 
-        // Buscar el Comandante rojo (podés asignarle un tag "PlayerCommander")
-        Commander commander = GameObject.FindWithTag("PlayerCommander").GetComponent<Commander>();
-        if (commander != null)
-        {
-            commander.MoveTo(cellCoords);
-        }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Comandante"))
+            occupied = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Comandante"))
+            occupied = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        PlayerResources.Instance.TryMoveSelectd(cellCoords);
     }
 }

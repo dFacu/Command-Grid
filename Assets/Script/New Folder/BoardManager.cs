@@ -36,7 +36,7 @@ public class BoardManager : MonoBehaviour
         GameObject unit = Instantiate(prefab, pos, Quaternion.identity, tilesParent);
         // Si la unidad tiene un componente Unit, asignar owner, stats, etc.
         var unitComp = unit.GetComponent<Unit>();
-        if (unitComp != null) unitComp.Initialize(owner, cell);
+        if (unitComp != null) unitComp.Initialize(owner);
 
         occupied[cell] = unit;
     }
@@ -54,5 +54,14 @@ public class BoardManager : MonoBehaviour
     public void RegisterUnitAt(Vector2Int cell, GameObject unit)
     {
         occupied[cell] = unit;
+    }
+
+    public GameObject GetUnitAt(Vector2Int cell)
+    {
+        if (occupied.TryGetValue(cell, out GameObject unit))
+        {
+            return unit;
+        }
+        return null;
     }
 }

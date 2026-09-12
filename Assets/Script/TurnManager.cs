@@ -4,9 +4,6 @@ public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance;
 
-    public GameObject commanderRedPrefab;
-    public GameObject commanderBluePrefab;
-
     public enum TurnState { PlayerTurn, EnemyTurn }
     public TurnState currentTurn = TurnState.PlayerTurn;
 
@@ -16,9 +13,6 @@ public class TurnManager : MonoBehaviour
     public PlayerResources player;
     public PlayerResources enemy;
 
-    private Commander commanderRed;
-    private Commander commanderBlue;
-
     void Awake()
     {
         Instance = this;
@@ -27,20 +21,15 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
-        // Instanciar comandantes en posiciones iniciales
-        BoardManager.Instance.SpawnUnit(commanderRedPrefab, new Vector2Int(0, 0), player);
-        BoardManager.Instance.SpawnUnit(commanderBluePrefab, new Vector2Int(4, 6), enemy);
-
-        commanderBlue = commanderBluePrefab.GetComponent<Commander>();
-        commanderRed = commanderRedPrefab.GetComponent<Commander>();
-
         StartPlayerTurn();
     }
+
+
     void Update()
     {
         turnTimer -= Time.deltaTime;
 
-        if(turnTimer <= 0)
+        if(turnTimer <= 0) // si el tiempo llega a 0 cambia a alguno de estos
         {
             if(currentTurn == TurnState.PlayerTurn)
                 EndPlayerTurn();
@@ -54,6 +43,19 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    void EndPlayerTurn()
+    {
+        player.EndTurn();
+        StartEnemyTurn();
+    }
+
+    void EndEnemyTurn()
+    {
+        enemy.EndTurn();
+        StartPlayerTurn();
+    }
+
+
     void StartPlayerTurn()
     {
         player.StartTurn(true);
@@ -62,11 +64,7 @@ public class TurnManager : MonoBehaviour
         turnTimer = turnDuration;
     }
 
-    void EndPlayerTurn()
-    {
-        player.EndTurn();
-        StartEnemyTurn();
-    }
+
 
     void StartEnemyTurn()
     {
@@ -74,29 +72,8 @@ public class TurnManager : MonoBehaviour
         enemy.StartTurn(false); // false = enemigo
         turnTimer = turnDuration;
 
-
-        // IA simple: mover hacia el jugador
-        if (commanderBlue != null && commanderRed != null)
-        {
-            Vector2Int enemyPos = commanderBlue.GetCurrentCell();
-            Vector2Int playerPos = commanderRed.GetCurrentCell();
-
-            Vector2Int target = enemyPos;
-            if (playerPos.x > enemyPos.x) target.x++;
-            else if (playerPos.x < enemyPos.x) target.x--;
-
-            if (playerPos.y > enemyPos.y) target.y++;
-            else if (playerPos.y < enemyPos.y) target.y--;
-
-            commanderBlue.MoveTo(target);
-        }
-
         Invoke("EndEnemyTurn", 2f);
     }
 
-    void EndEnemyTurn()
-    {
-        enemy.EndTurn();
-        StartPlayerTurn();
-    }
+
 }

@@ -1,17 +1,60 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerResources : MonoBehaviour
 {
+    public static PlayerResources Instance;
+
     public string ownerName;
     public int currentPoints;
     public int maxPoints = 8;
     public int turnNumber = 1;
 
+
+    public Unit selectedUnit;
+
+    public List<GameObject> units = new List<GameObject>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     public PlayerResources(string name)
     {
         ownerName = name;
         currentPoints = 0;
     }
+
+    public void SelectUnit(Unit unit) {  selectedUnit = unit;  }
+
+    public void TryMoveSelectd(Vector3 cell)
+    {
+        if(selectedUnit == null) return;
+
+        if (!selectedUnit.hasMovedThisTurn)
+        {
+            selectedUnit.MoveTo(cell);
+            selectedUnit.hasMovedThisTurn = true;
+        }
+        else
+        {
+            Debug.Log("Esta unidad ya se movio en este turno");
+        }
+    }
+
+
+    public void ResetTurn()
+    {
+        foreach(GameObject unit in units)
+        {
+            var und = unit.GetComponent<Unit>();
+            und.hasMovedThisTurn = false;
+            selectedUnit = null;
+        }
+    }
+
+    public void RegisterUnit(GameObject unit)  {  units.Add(unit); }
 
     public void StartTurn(bool isFirstPlayer)
     {
@@ -49,5 +92,9 @@ public class PlayerResources : MonoBehaviour
     public void EndTurn()
     {
         turnNumber++;
+        ResetTurn();
     }
+
+
+    
 }

@@ -34,7 +34,7 @@ public class GridGenerator : MonoBehaviour
                 TileClick click = tile.GetComponent<TileClick>();
                 if (click != null)
                 {
-                    click.cellCoords = new Vector2Int(x, y);
+                    //click.cellCoords = new Vector2Int(x, y);
                 }
             }
         }
