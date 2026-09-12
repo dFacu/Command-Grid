@@ -13,6 +13,7 @@ public class TurnManager : MonoBehaviour
     public PlayerResources player;
     public PlayerResources enemy;
 
+
     void Awake()
     {
         Instance = this;
@@ -23,8 +24,6 @@ public class TurnManager : MonoBehaviour
     {
         StartPlayerTurn();
     }
-
-
     void Update()
     {
         turnTimer -= Time.deltaTime;
