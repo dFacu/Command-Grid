@@ -255,7 +255,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 568002725}
-  - component: {fileID: 568002724}
+  - component: {fileID: 568002727}
+  - component: {fileID: 568002726}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -263,24 +264,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &568002724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 568002723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2660dddbc93de56429a81ad270e5ca87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
-  ownerName: Enemy
-  currentPoints: 0
-  maxPoints: 8
-  turnNumber: 0
-  selectedUnit: {fileID: 0}
-  units: []
 --- !u!4 &568002725
 Transform:
   m_ObjectHideFlags: 0
@@ -296,6 +279,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &568002726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568002723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f37ddb51f0330744a345347f477604d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IAEnemy
+  resources: {fileID: 568002727}
+  resourcesPlayer: {fileID: 802497290}
+--- !u!114 &568002727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568002723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2660dddbc93de56429a81ad270e5ca87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
+  ownerName: Enemy
+  currentPoints: 0
+  maxPoints: 0
+  turnNumber: 0
+  selectedUnit: {fileID: 0}
+  units: []
 --- !u!1 &802497289
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +643,7 @@ MonoBehaviour:
   Comandante_1: {fileID: 3062425546180239302, guid: 0b3b40a27d2e39d448018ba260c56ea3, type: 3}
   Comandante_2: {fileID: 3062425546180239302, guid: b41440028ecc5ed45922c3153c8e9cfe, type: 3}
   player: {fileID: 802497290}
-  enemy: {fileID: 568002724}
+  enemy: {fileID: 568002727}
 --- !u!4 &1938737407
 Transform:
   m_ObjectHideFlags: 0
@@ -659,7 +674,7 @@ MonoBehaviour:
   currentTurn: 0
   turnDuration: 30
   player: {fileID: 802497290}
-  enemy: {fileID: 568002724}
+  enemy: {fileID: 568002727}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

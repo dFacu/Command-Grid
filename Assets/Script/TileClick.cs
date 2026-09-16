@@ -26,6 +26,6 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        PlayerResources.Instance.TryMoveSelectd(cellCoords);
+        PlayerResources.Instance.TryMoveOrAttack(cellCoords);
     }
 }

@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,27 +26,40 @@ public class PlayerResources : MonoBehaviour
         currentPoints = 0;
     }
 
-    public void SelectUnit(Unit unit) {  selectedUnit = unit;  }
+    public void SelectUnit(Unit unit) { selectedUnit = unit; }
 
-    public void TryMoveSelectd(Vector3 cell)
+    public void TryMoveOrAttack(Vector3 targetCell)
     {
-        if(selectedUnit == null) return;
+        if (selectedUnit == null) return;
 
-        if (!selectedUnit.hasMovedThisTurn)
+        //Buscar si hay una unidad en esa celda
+        GameObject target = FindUnitAtCell(targetCell);
+        Unit targetUnit = null;
+       
+        if (target != null)
         {
-            selectedUnit.MoveTo(cell);
+             targetUnit = target.GetComponent<Unit>();
+        }
+
+        if (targetUnit != null && targetUnit.owner != selectedUnit.owner)
+        {
+            //Atacar
+            selectedUnit.Attack(targetUnit);
+        }
+        else if (!selectedUnit.hasMovedThisTurn && targetUnit == null)
+        {
+            selectedUnit.MoveTo(targetCell);
             selectedUnit.hasMovedThisTurn = true;
         }
         else
         {
-            Debug.Log("Esta unidad ya se movio en este turno");
+            Debug.Log("Movimiento inválido o celda ocupada por aliado");
         }
     }
 
-
     public void ResetTurn()
     {
-        foreach(GameObject unit in units)
+        foreach (GameObject unit in units)
         {
             var und = unit.GetComponent<Unit>();
             und.hasMovedThisTurn = false;
@@ -54,7 +67,7 @@ public class PlayerResources : MonoBehaviour
         }
     }
 
-    public void RegisterUnit(GameObject unit)  {  units.Add(unit); }
+    public void RegisterUnit(GameObject unit) { units.Add(unit); }
 
     public void StartTurn(bool isFirstPlayer)
     {
@@ -65,7 +78,7 @@ public class PlayerResources : MonoBehaviour
         }
         else
         {
-            // A partir del segundo turno: +2 hasta m�ximo
+            // A partir del segundo turno: +2 hasta máximo
             currentPoints += 2;
             if (currentPoints > maxPoints)
                 currentPoints = maxPoints;
@@ -76,10 +89,10 @@ public class PlayerResources : MonoBehaviour
 
     public bool SpendPoints(int cost)
     {
-        if(currentPoints >= cost)
+        if (currentPoints >= cost)
         {
             currentPoints -= cost;
-            Debug.Log($"{ownerName} gast� {cost} PC. Restan {currentPoints}");
+            Debug.Log($"{ownerName} gastó {cost} PC. Restan {currentPoints}");
             return true;
         }
         else
@@ -95,6 +108,40 @@ public class PlayerResources : MonoBehaviour
         ResetTurn();
     }
 
+    private GameObject FindUnitAtCell(Vector3 cell)
+    {
+        // Buscar en jugador
+        foreach (GameObject u in PlayerResources.Instance.units)
+        {
+            Vector3 unitCell = u.GetComponent<Unit>().currentCell;
 
-    
+            // Normalizar altura: (y - 0.5) → redondear
+            int unitY = Mathf.RoundToInt(unitCell.y - 0.5f);
+            int cellY = Mathf.RoundToInt(cell.y - 0.5f);
+
+            if (Mathf.RoundToInt(unitCell.x) == Mathf.RoundToInt(cell.x) &&
+                unitY == cellY &&
+                Mathf.RoundToInt(unitCell.z) == Mathf.RoundToInt(cell.z))
+            {
+                return u;
+            }
+        }
+
+        // Buscar en IA
+        foreach (GameObject u in IAEnemy.Instance.resources.units)
+        {
+            Vector3 unitCell = u.GetComponent<Unit>().currentCell;
+
+            int unitY = Mathf.RoundToInt(unitCell.y - 0.5f);
+            int cellY = Mathf.RoundToInt(cell.y - 0.5f);
+
+            if (Mathf.RoundToInt(unitCell.x) == Mathf.RoundToInt(cell.x) &&
+                unitY == cellY &&
+                Mathf.RoundToInt(unitCell.z) == Mathf.RoundToInt(cell.z))
+            {
+                return u;
+            }
+        }
+        return null;
+    }
 }

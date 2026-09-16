@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    public static Manager Instance;
+
     [SerializeField] GameObject Comandante_1;
     [SerializeField] GameObject Comandante_2;
 
     public PlayerResources player;
     public PlayerResources enemy;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         GridControler.Instance.DashboardGenerator();
@@ -28,7 +34,7 @@ public class Manager : MonoBehaviour
         var unitComp = clon.GetComponent<Unit>();
         if (unitComp != null) unitComp.Initialize(owner);
 
-        owner.RegisterUnit(unitComp.gameObject);
-        
+        owner.RegisterUnit(unitComp.gameObject);    
     }
+
 }

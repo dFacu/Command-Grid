@@ -67,6 +67,7 @@ public class TurnManager : MonoBehaviour
 
     void StartEnemyTurn()
     {
+        IAEnemy.Instance.PlayTurn();
         currentTurn = TurnState.EnemyTurn;
         enemy.StartTurn(false); // false = enemigo
         turnTimer = turnDuration;

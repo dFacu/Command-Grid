@@ -12,7 +12,7 @@ public class Unit : MonoBehaviour
     public bool hasMovedThisTurn;
 
 
-    private Vector2Int currentCell;
+    public Vector3 currentCell;
 
     public void Initialize(PlayerResources ownerRef) {  owner = ownerRef; }
 
@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour
         Vector3 pos = new Vector3(cell.x, 0.5f, cell.z);
 
         transform.position = pos;
+        currentCell = cell;
     }
 
     public void Attack(Unit target)
@@ -32,10 +33,12 @@ public class Unit : MonoBehaviour
 
         if (target.health <= 0)
         {
-            BoardManager.Instance.RemoveUnitAt(target.GetCurrentCell());
+           // BoardManager.Instance.RemoveUnitAt(target.GetCurrentCell());
             Destroy(target.gameObject);
             Debug.Log($"{target.name} fue derrotado!");
         }
+
+        hasMovedThisTurn = true;
     }
 
     public void TakeDamage(int dmg)
@@ -44,14 +47,22 @@ public class Unit : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log($"{gameObject.name} ha sido derrotado");
-            BoardManager.Instance.RemoveUnitAt(currentCell);
+           // BoardManager.Instance.RemoveUnitAt(currentCell);
             Destroy(gameObject);
         }
     }
 
-    public Vector2Int GetCurrentCell()
+    public bool IsInAttackRange(Unit target)
     {
-        return currentCell;
+        Vector3Int unitCell = Vector3Int.RoundToInt(this.currentCell - new Vector3(0, 0.5f, 0));
+        Vector3Int targetCell = Vector3Int.RoundToInt(target.currentCell - new Vector3(0, 0.5f, 0));
+
+        float dist = Vector2Int.Distance(
+            new Vector2Int(unitCell.x, unitCell.z),
+            new Vector2Int(targetCell.x, targetCell.z)
+        );
+        return dist <= 1;
     }
+
 }
 
