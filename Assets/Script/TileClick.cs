@@ -1,12 +1,14 @@
-using Unity.VisualScripting;
+﻿using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TileClick : MonoBehaviour, IPointerClickHandler
 {
-    public Vector3 cellCoords; // coordenadas l�gicas del tile
+    public Vector3 cellCoords; // coordenadas lógicas del tile
     public bool occupied = false;
 
+    public bool hasTrap = false;
+    public int trapDamage = 0;
     private void Start()
     {
         cellCoords = transform.position;
@@ -15,7 +17,21 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Comandante"))
+        {
             occupied = true;
+
+            // Si hay trampa → explota
+            if (hasTrap)
+            {
+                Unit unit = other.GetComponent<Unit>();
+                if (unit != null)
+                {
+                    unit.TakeDamage(trapDamage);
+                    hasTrap = false; // se consume
+                    Debug.Log($"¡Trampa explotó! {unit.name} recibió {trapDamage} de daño.");
+                }
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -26,6 +42,14 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        PlayerResources.Instance.TryMoveOrAttack(cellCoords);
+        if (PlayerResources.Instance.isPlacingTrap)
+        {
+            //Selecionar tile para trampa
+            PlayerResources.Instance.SelectedTile(this);
+        }
+        else
+        {
+            PlayerResources.Instance.TryMoveOrAttack(cellCoords);
+        }
     }
 }

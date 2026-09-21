@@ -8,6 +8,9 @@ public class Manager : MonoBehaviour
     [SerializeField] GameObject Comandante_2;
 
     public PlayerResources player;
+    public PlayerData playerData;
+
+    public IAEnemy iAEnemy;
     public PlayerResources enemy;
 
     private void Awake()
@@ -17,24 +20,17 @@ public class Manager : MonoBehaviour
     void Start()
     {
         GridControler.Instance.DashboardGenerator();
-        SpawnUnit(Comandante_1, new Vector3(0, 0, 0), player);
-        SpawnUnit(Comandante_2, new Vector3(4, 4, 0), enemy);
+        player.InitPlayer(playerData.DeckCargado);
+        player.SpawnUnit(Comandante_1, new Vector3(0, 0, 0), player);
+        enemy.InitPlayer(iAEnemy.DeckCargado);
+        enemy.SpawnUnit(Comandante_2, new Vector3(4, 4, 0), enemy);
+
     }
 
 
 
 
     //--------------------------------------
-    void SpawnUnit(GameObject unit, Vector3 cell, PlayerResources owner)
-    {
-        Vector3 pos = new Vector3(cell.x, 0.5f, cell.y);
 
-        GameObject clon = Instantiate(unit, pos,Quaternion.identity);
-
-        var unitComp = clon.GetComponent<Unit>();
-        if (unitComp != null) unitComp.Initialize(owner);
-
-        owner.RegisterUnit(unitComp.gameObject);    
-    }
 
 }

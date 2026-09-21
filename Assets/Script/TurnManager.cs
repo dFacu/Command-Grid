@@ -57,6 +57,7 @@ public class TurnManager : MonoBehaviour
 
     void StartPlayerTurn()
     {
+        //player.InitPlayer();
         player.StartTurn(true);
 
         currentTurn = TurnState.PlayerTurn;

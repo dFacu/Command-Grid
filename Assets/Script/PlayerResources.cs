@@ -16,14 +16,36 @@ public class PlayerResources : MonoBehaviour
 
     public List<GameObject> units = new List<GameObject>();
 
+    public bool isPlacingTrap = false;
+    public TileClick selectedTile;
+
+    public Deck deck;
+    public Hand hand;
+
+
     private void Awake()
     {
         Instance = this;
     }
+
     public PlayerResources(string name)
     {
         ownerName = name;
         currentPoints = 0;
+    }
+
+    public void InitPlayer(List<CardSO> startingDeck)
+    {
+        deck = new Deck(startingDeck);
+        hand = new Hand();
+
+        //Roba x cartas iniciales
+        for(int i=0; i<4; i++)
+        {
+            CardSO card = deck.DrawCard();
+            if(card != null )
+                hand.AddCard(card);
+        }
     }
 
     public void SelectUnit(Unit unit) { selectedUnit = unit; }
@@ -144,4 +166,32 @@ public class PlayerResources : MonoBehaviour
         }
         return null;
     }
+
+
+    public void SpawnUnit(GameObject unit, Vector3 cell, PlayerResources owner)
+    {
+        Vector3 pos = new Vector3(cell.x, 0.5f, cell.y);
+
+        GameObject clon = Instantiate(unit, pos, Quaternion.identity);
+
+        var unitComp = clon.GetComponent<Unit>();
+        if (unitComp != null) unitComp.Initialize(owner);
+
+        owner.RegisterUnit(unitComp.gameObject);
+    }
+
+    public void SelectedTile(TileClick tile)
+    {
+        selectedTile = tile;
+    }
+
+    public void PlaceTrap(TileClick tile, CardSO card)
+    {
+        tile.hasTrap = true;
+        tile.trapDamage = card.value;
+        isPlacingTrap = false; // sale del modo trampa
+        Debug.Log($"Trampa colocada en {tile.name} con daño {tile.trapDamage}");
+    }
 }
+
+
