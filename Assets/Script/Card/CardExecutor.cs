@@ -1,7 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class CardExecutor
 {
+
     public static void Play(CardSO card, PlayerResources owner)
     {
         if (!owner.SpendPoints(card.cost)) return;
@@ -9,16 +11,18 @@ public static class CardExecutor
         switch (card.effectType)
         {
             case EffectType.SpawnUnit:
-                if (card.prefab != null)
-                {
-                    owner.SpawnUnit(card.prefab,Vector3.one,owner);
-                    Debug.Log($"{card.cardName} invocó una unidad.");
-                }
+                owner.isPlacingSpawn = true;              // modo selección de tile
+                owner.cardPendingSpawn = card;            // guardamos la carta
+                Debug.Log($"{card.cardName} activó modo invocación de unidad.");
                 break;
             case EffectType.Trap:
-                owner.isPlacingTrap = true; // Modo selec Tile
+                owner.isPlacingTrap = true;
+                owner.cardPendingTrap = card; // guardamos la carta que disparó el modo
+                Debug.Log($"{card.cardName} activó modo selección de tile.");
+
+                /*owner.isPlacingTrap = true; // Modo selec Tile
                 owner.PlaceTrap(owner.selectedTile, card);
-               
+               */
                 break;
             case EffectType.Damage:
                 /*if (owner.SelectedUnit != null)
@@ -28,6 +32,8 @@ public static class CardExecutor
                 }*/
                 break;
         }
+
+        
     }
 }
 

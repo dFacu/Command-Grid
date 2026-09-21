@@ -14,13 +14,4 @@ public class Hand : MonoBehaviour
         if (cardsInHand.Count < maxHandSize)
             cardsInHand.Add(card);
     }
-
-    public void PlayCard(int index, PlayerResources owner)
-    {
-        if (index < 0 || index >= cardsInHand.Count) return;
-
-        CardSO card = cardsInHand[index];
-        CardExecutor.Play(card, owner);
-        cardsInHand.RemoveAt(index);
-    }
 }

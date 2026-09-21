@@ -17,10 +17,12 @@ public class PlayerResources : MonoBehaviour
     public List<GameObject> units = new List<GameObject>();
 
     public bool isPlacingTrap = false;
-    public TileClick selectedTile;
+    public CardSO cardPendingTrap; // carta que espera colocación
+
+    public bool isPlacingSpawn = false;
+    public CardSO cardPendingSpawn;
 
     public Deck deck;
-    public Hand hand;
 
 
     private void Awake()
@@ -34,19 +36,7 @@ public class PlayerResources : MonoBehaviour
         currentPoints = 0;
     }
 
-    public void InitPlayer(List<CardSO> startingDeck)
-    {
-        deck = new Deck(startingDeck);
-        hand = new Hand();
 
-        //Roba x cartas iniciales
-        for(int i=0; i<4; i++)
-        {
-            CardSO card = deck.DrawCard();
-            if(card != null )
-                hand.AddCard(card);
-        }
-    }
 
     public void SelectUnit(Unit unit) { selectedUnit = unit; }
 
@@ -180,17 +170,24 @@ public class PlayerResources : MonoBehaviour
         owner.RegisterUnit(unitComp.gameObject);
     }
 
-    public void SelectedTile(TileClick tile)
+    public void SpawnUnitAtTile(TileClick tile, CardSO card)
     {
-        selectedTile = tile;
+        if (card.prefab == null) return;
+
+        Vector3 spawnPos = new Vector3( tile.cellCoords.x, 0.5f, tile.cellCoords.y);
+        GameObject unit = Instantiate(card.prefab, spawnPos, Quaternion.identity);
+        isPlacingSpawn = false; // salir del modo spawn
+
+        Debug.Log($"Unidad {card.cardName} invocada en {tile.name}");
     }
+
 
     public void PlaceTrap(TileClick tile, CardSO card)
     {
         tile.hasTrap = true;
         tile.trapDamage = card.value;
-        isPlacingTrap = false; // sale del modo trampa
-        Debug.Log($"Trampa colocada en {tile.name} con daño {tile.trapDamage}");
+        isPlacingTrap = false; // salir del modo trampa
+        Debug.Log($"Trampa {card.cardName} colocada en {tile.name} con daño {tile.trapDamage}");
     }
 }
 

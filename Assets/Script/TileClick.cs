@@ -44,8 +44,13 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
     {
         if (PlayerResources.Instance.isPlacingTrap)
         {
-            //Selecionar tile para trampa
-            PlayerResources.Instance.SelectedTile(this);
+            PlayerResources.Instance.PlaceTrap(this, PlayerResources.Instance.cardPendingTrap);
+            PlayerResources.Instance.cardPendingTrap = null;
+        }
+        else if (PlayerResources.Instance.isPlacingSpawn)
+        {
+            PlayerResources.Instance.SpawnUnitAtTile(this, PlayerResources.Instance.cardPendingSpawn);
+            PlayerResources.Instance.cardPendingSpawn = null;
         }
         else
         {

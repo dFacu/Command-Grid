@@ -20,9 +20,9 @@ public class Manager : MonoBehaviour
     void Start()
     {
         GridControler.Instance.DashboardGenerator();
-        player.InitPlayer(playerData.DeckCargado);
+        playerData.InitPlayer(playerData.DeckCargado);
         player.SpawnUnit(Comandante_1, new Vector3(0, 0, 0), player);
-        enemy.InitPlayer(iAEnemy.DeckCargado);
+        iAEnemy.InitPlayer(iAEnemy.DeckCargado);
         enemy.SpawnUnit(Comandante_2, new Vector3(4, 4, 0), enemy);
 
     }

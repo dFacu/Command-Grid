@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class IAEnemy : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class IAEnemy : MonoBehaviour
 
 
     public List<CardSO> DeckCargado;
-
+    public List<CardSO> hand;
 
     private void Awake()
     {
@@ -70,5 +71,24 @@ public class IAEnemy : MonoBehaviour
         if (unitComp != null) unitComp.Initialize(owner);
 
         owner.RegisterUnit(unitComp.gameObject);
+    }
+
+    public CardSO DrawCard()
+    {
+        if (DeckCargado.Count == 0) return null;
+
+        CardSO draw = DeckCargado[0];
+        DeckCargado.RemoveAt(0);
+        return draw;
+    }
+    public void InitPlayer(List<CardSO> startingDeck)
+    {
+        //Roba x cartas iniciales
+        for (int i = 0; i < 4; i++)
+        {
+            CardSO card = DrawCard();
+            if (card != null)
+                hand.Add(card);
+        }
     }
 }
