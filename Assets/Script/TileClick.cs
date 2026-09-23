@@ -7,6 +7,8 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
     public Vector3 cellCoords; // coordenadas lógicas del tile
     public bool occupied = false;
 
+    public GameObject unitInCell;
+    
     public bool hasTrap = false;
     public int trapDamage = 0;
     private void Start()

@@ -17,9 +17,11 @@ public class CardUI : MonoBehaviour
     public int value;
     public TextMeshProUGUI valueText;
 
+    public GameObject Prefab;
     
     public void LoadCard(CardSO card)
     {
+        Prefab = card.prefab;
         name = card.name;
         nameText.text = card.name.ToString();
 
