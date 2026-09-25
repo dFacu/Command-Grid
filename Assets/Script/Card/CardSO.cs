@@ -39,5 +39,6 @@ public class CardSO : ScriptableObject
     public List<Element> elements;
 
     public int value; // daño, curación, etc.
+    public int distance; 
     public GameObject prefab; // para unidades
 }

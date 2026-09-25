@@ -8,7 +8,7 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
     public bool occupied = false;
 
     public GameObject unitInCell;
-    
+
     public bool hasTrap = false;
     public int trapDamage = 0;
     private void Start()
@@ -44,19 +44,7 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (PlayerResources.Instance.isPlacingTrap)
-        {
-            PlayerResources.Instance.PlaceTrap(this, PlayerResources.Instance.cardPendingTrap);
-            PlayerResources.Instance.cardPendingTrap = null;
-        }
-        else if (PlayerResources.Instance.isPlacingSpawn)
-        {
-            PlayerResources.Instance.SpawnUnitAtTile(this, PlayerResources.Instance.cardPendingSpawn);
-            PlayerResources.Instance.cardPendingSpawn = null;
-        }
-        else
-        {
-            PlayerResources.Instance.TryMoveOrAttack(cellCoords);
-        }
+        PlayerResources.Instance.TryMoveOrAttack(cellCoords);
+
     }
 }

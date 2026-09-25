@@ -11,19 +11,15 @@ public class PlayerResources : MonoBehaviour
     public int maxPoints = 8;
     public int turnNumber = 1;
 
+    
 
     public Unit selectedUnit;
 
     public List<GameObject> units = new List<GameObject>();
 
-    public bool isPlacingTrap = false;
-    public CardSO cardPendingTrap; // carta que espera colocación
-
-    public bool isPlacingSpawn = false;
-    public CardSO cardPendingSpawn;
-
     public Deck deck;
 
+    
 
     private void Awake()
     {
@@ -44,21 +40,7 @@ public class PlayerResources : MonoBehaviour
     {
         if (selectedUnit == null) return;
 
-        //Buscar si hay una unidad en esa celda
-        GameObject target = FindUnitAtCell(targetCell);
-        Unit targetUnit = null;
-       
-        if (target != null)
-        {
-             targetUnit = target.GetComponent<Unit>();
-        }
-
-        if (targetUnit != null && targetUnit.owner != selectedUnit.owner)
-        {
-            //Atacar
-            selectedUnit.Attack(targetUnit);
-        }
-        else if (!selectedUnit.hasMovedThisTurn && targetUnit == null)
+        if (!selectedUnit.hasMovedThisTurn)
         {
             selectedUnit.MoveTo(targetCell);
             selectedUnit.hasMovedThisTurn = true;
@@ -168,26 +150,6 @@ public class PlayerResources : MonoBehaviour
         if (unitComp != null) unitComp.Initialize(owner);
 
         owner.RegisterUnit(unitComp.gameObject);
-    }
-
-    public void SpawnUnitAtTile(TileClick tile, CardSO card)
-    {
-        if (card.prefab == null) return;
-
-        Vector3 spawnPos = new Vector3( tile.cellCoords.x, 0.5f, tile.cellCoords.y);
-        GameObject unit = Instantiate(card.prefab, spawnPos, Quaternion.identity);
-        isPlacingSpawn = false; // salir del modo spawn
-
-        Debug.Log($"Unidad {card.cardName} invocada en {tile.name}");
-    }
-
-
-    public void PlaceTrap(TileClick tile, CardSO card)
-    {
-        tile.hasTrap = true;
-        tile.trapDamage = card.value;
-        isPlacingTrap = false; // salir del modo trampa
-        Debug.Log($"Trampa {card.cardName} colocada en {tile.name} con daño {tile.trapDamage}");
     }
 }
 

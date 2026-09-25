@@ -17,5 +17,7 @@ MonoBehaviour:
   cost: 1
   description: Lanza un hacha voladora contra una unidad enemiga.
   effectType: 2
+  elements: 
   value: 2
+  distance: 2
   prefab: {fileID: 0}

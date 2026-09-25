@@ -369,13 +369,9 @@ MonoBehaviour:
   ownerName: Enemy
   currentPoints: 0
   maxPoints: 0
-  turnNumber: 0
+  turnNumber: 1
   selectedUnit: {fileID: 0}
   units: []
-  isPlacingTrap: 0
-  cardPendingTrap: {fileID: 0}
-  isPlacingSpawn: 0
-  cardPendingSpawn: {fileID: 0}
 --- !u!1 &651600249
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,13 +462,9 @@ MonoBehaviour:
   ownerName: Player
   currentPoints: 0
   maxPoints: 8
-  turnNumber: 0
+  turnNumber: 1
   selectedUnit: {fileID: 0}
   units: []
-  isPlacingTrap: 0
-  cardPendingTrap: {fileID: 0}
-  isPlacingSpawn: 0
-  cardPendingSpawn: {fileID: 0}
 --- !u!4 &802497291
 Transform:
   m_ObjectHideFlags: 0
@@ -800,13 +792,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1171299788}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24091417, y: 0, z: 0, w: 0.9705464}
-  m_LocalPosition: {x: -0.685, y: 1.5, z: -5.627}
+  m_LocalRotation: {x: 0.27273786, y: -0, z: -0, w: 0.9620884}
+  m_LocalPosition: {x: 2.51, y: 3.32, z: -4.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 27.881, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 31.655, y: 0, z: 0}
 --- !u!114 &1171299793
 MonoBehaviour:
   m_ObjectHideFlags: 0

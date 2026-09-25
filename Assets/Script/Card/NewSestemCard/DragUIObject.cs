@@ -17,22 +17,28 @@ public class DragUIObject : MonoBehaviour, IDragHandler, IPointerDownHandler //T
 
     public void OnPointerDown(PointerEventData eventData) //This is inherited from the IPointerDownHandler class referenced above
     {
+
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out originalLocalPointerPosition); //Using the event system to detect what is clicked on
         originalPanelLocalPosition = rectTransform.localPosition;
     }
 
     public void OnDrag(PointerEventData eventData) //This is inherited from the IDragHandler class referenced above
     {
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector2 localPointerPosition))
+        CardUI card = GetComponent<CardUI>();
+
+        if (card.cost <= Manager.Instance.player.currentPoints)
         {
-            localPointerPosition /= canvas.scaleFactor;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out Vector2 localPointerPosition))
+            {
+                localPointerPosition /= canvas.scaleFactor;
 
-            // Adjusting the movement based on sensitivity
-            Vector3 offsetToOriginal = (localPointerPosition - originalLocalPointerPosition) * movementSensitivity;
-            rectTransform.localPosition = originalPanelLocalPosition + offsetToOriginal;
+                // Adjusting the movement based on sensitivity
+                Vector3 offsetToOriginal = (localPointerPosition - originalLocalPointerPosition) * movementSensitivity;
+                rectTransform.localPosition = originalPanelLocalPosition + offsetToOriginal;
 
-            // Debug output
-            Debug.Log($"Drag - LocalPointerPosition: {localPointerPosition}, Offset: {offsetToOriginal}, New Position: {rectTransform.localPosition}"); //Comment out this line if not debugging an issue, otherwise it will flood the console unnecessarily
+                // Debug output
+                // Debug.Log($"Drag - LocalPointerPosition: {localPointerPosition}, Offset: {offsetToOriginal}, New Position: {rectTransform.localPosition}"); //Comment out this line if not debugging an issue, otherwise it will flood the console unnecessarily
+            }
         }
     }
 }

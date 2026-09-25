@@ -24,22 +24,6 @@ public class Unit : MonoBehaviour
         currentCell = cell;
     }
 
-    public void Attack(Unit target)
-    {
-        if (target == null) return;
-
-        target.health -= attack;
-        Debug.Log($"{name} atacó a {target.name}, vida restante: {target.health}");
-
-        if (target.health <= 0)
-        {
-           // BoardManager.Instance.RemoveUnitAt(target.GetCurrentCell());
-            Destroy(target.gameObject);
-            Debug.Log($"{target.name} fue derrotado!");
-        }
-
-        hasMovedThisTurn = true;
-    }
 
     public void TakeDamage(int dmg)
     {

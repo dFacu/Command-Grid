@@ -21,9 +21,11 @@ public class Manager : MonoBehaviour
     {
         GridControler.Instance.DashboardGenerator();
         playerData.InitPlayer(playerData.DeckCargado);
-        player.SpawnUnit(Comandante_1, new Vector3(0, 0, 0), player);
+        GridControler.Instance.AddObjectToGrid(Comandante_1, new Vector3(0, 0.5f, 0));
+        //player.SpawnUnit(Comandante_1, new Vector3(0, 0, 0), player);
         iAEnemy.InitPlayer(iAEnemy.DeckCargado);
-        enemy.SpawnUnit(Comandante_2, new Vector3(4, 4, 0), enemy);
+        GridControler.Instance.AddObjectToGrid(Comandante_2, new Vector3(4, 0.5f, 4));
+        //enemy.SpawnUnit(Comandante_2, new Vector3(4, 4, 0), enemy);
 
     }
 

@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3062425546180239302}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.43454, y: 0.01174, z: -0.24734}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -132,6 +132,8 @@ MonoBehaviour:
   health: 5
   attack: 2
   movementRange: 1
+  hasMovedThisTurn: 0
+  currentCell: {x: 0, y: 0, z: 0}
   commanderName: Comandante
   specialAbilityCost: 3
 --- !u!54 &9050320653369126060

@@ -60,7 +60,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         {
             updatePlayPostion();
         }
-        
+
         switch (currentState)
         {
             case 1:
@@ -121,26 +121,42 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
     {
         if (currentState == 2)
         {
-            if (Input.mousePosition.y > cardPlay.y)
+            CardUI card = GetComponent<CardUI>();
+
+            if (card.cost <= Manager.Instance.player.currentPoints)
             {
-                currentState = 3;
-                playArrow.SetActive(true);
-                rectTransform.localPosition = Vector3.Lerp(rectTransform.position, playPosition, lerpFactor);
+                if (Input.mousePosition.y > cardPlay.y)
+                {
+                    currentState = 3;
+                    playArrow.SetActive(true);
+                    rectTransform.localPosition = Vector3.Lerp(rectTransform.position, playPosition, lerpFactor);
+                }
             }
         }
     }
 
     private void HandleHoverState()
     {
-        glowEffect.SetActive(true);
-        rectTransform.localScale = originalScale * selectScale;
+        CardUI card = GetComponent<CardUI>();
+
+        if (card.cost <= Manager.Instance.player.currentPoints)
+        {
+            glowEffect.SetActive(true);
+            rectTransform.localScale = originalScale * selectScale;
+        }
+
     }
 
     private void HandleDragState()
     {
-        //Set the card's rotation to zero
-        rectTransform.localRotation = Quaternion.identity;
-        rectTransform.position = Vector3.Lerp(rectTransform.position, Input.mousePosition, lerpFactor);
+        CardUI card = GetComponent<CardUI>();
+
+        if (card.cost <= Manager.Instance.player.currentPoints)
+        {
+            //Set the card's rotation to zero
+            rectTransform.localRotation = Quaternion.identity;
+            rectTransform.position = Vector3.Lerp(rectTransform.position, Input.mousePosition, lerpFactor);
+        }
     }
 
     private void HandlePlayState()
@@ -148,7 +164,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
         rectTransform.localPosition = playPosition;
         rectTransform.localRotation = Quaternion.identity;
 
-        if(!Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -156,24 +172,82 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             if (Physics.Raycast(ray, out hit))
             {
                 TileClick cell = hit.collider.GetComponent<TileClick>();
+                CardUI card = GetComponent<CardUI>();
+
                 if (cell != null)
                 {
-                    Vector3 targetPos = cell.cellCoords;
-                    
-
-                    if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos))
+                    if ((card.effectType == EffectType.SpawnUnit))   // Invoca una unidad 
                     {
+                        Vector3 targetPos = cell.cellCoords;
+
+
+                        if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos))
+                        {
+                            HandManager handManager = FindAnyObjectByType<HandManager>();
+                            handManager.cardsInHand.Remove(gameObject);
+                            handManager.UpdateHandVisuals();
+                            Debug.Log("character");
+                            Manager.Instance.player.currentPoints -= card.cost;
+                            Destroy(gameObject);
+                        }
+                    }
+                    else if (card.effectType == EffectType.Trap)
+                    {
+                        cell.hasTrap = true;
+                        cell.trapDamage = card.value;
+                        Renderer cellRender = cell.GetComponent<Renderer>();
+                        cellRender.material.color = Color.azure;
+                        Debug.Log($"Trampa colocada en {cell.name} con daño {cell.trapDamage}");
+
                         HandManager handManager = FindAnyObjectByType<HandManager>();
                         handManager.cardsInHand.Remove(gameObject);
                         handManager.UpdateHandVisuals();
-                        Debug.Log("character");
+                        Manager.Instance.player.currentPoints -= card.cost;
                         Destroy(gameObject);
                     }
+
+                }
+                else
+                {
+                    if (card.effectType == EffectType.Damage)
+                    {
+                        Unit target = hit.collider.GetComponent<Unit>();
+
+                        if (target != null)
+                        {
+                            // Posición de la unidad seleccionada
+                            Vector3 attackerPos = Manager.Instance.player.selectedUnit.transform.position;
+                            Vector3 targetPos = target.transform.position;
+
+                            // Calcular distancia
+                            float distance = Vector3.Distance(attackerPos, targetPos);
+
+                            // Chequear si está dentro del rango permitido por la carta
+                            if (distance <= card.distance)
+                            {
+                                target.TakeDamage(card.value);
+                                Debug.Log($"{card.name} infligió {card.value} de daño a {target.name} (distancia: {distance})");
+
+                                HandManager handManager = FindAnyObjectByType<HandManager>();
+                                handManager.cardsInHand.Remove(gameObject);
+                                handManager.UpdateHandVisuals();
+                                Manager.Instance.player.currentPoints -= card.cost;
+                                Destroy(gameObject);
+                            }
+                            else
+                            {
+                                Debug.Log($"{card.name} no puede atacar: objetivo fuera de rango (distancia: {distance}, rango: {card.distance})");
+                            }
+                        }
+                    }
+
                 }
             }
 
             TransitionToState0();
         }
+
+
 
         if (Input.mousePosition.y < cardPlay.y)
         {

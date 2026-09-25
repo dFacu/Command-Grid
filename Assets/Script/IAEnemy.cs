@@ -33,7 +33,7 @@ public class IAEnemy : MonoBehaviour
                 //Si esta en rango de ataque → atacar
                 if (u.IsInAttackRange(target))
                 {
-                    u.Attack(target);
+                    //u.Attack(target);
                 }
                 else
                 {
