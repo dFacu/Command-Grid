@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class CardUI : MonoBehaviour
 {
     public string name;
+    public CardSO cardData;
     public TextMeshProUGUI nameText;
 
     public string description;
@@ -30,7 +31,10 @@ public class CardUI : MonoBehaviour
     public int distance;
     public void LoadCard(CardSO card)
     {
+        cardData = card;
+
         Prefab = card.prefab;
+
         name = card.name;
         nameText.text = card.name.ToString();
 

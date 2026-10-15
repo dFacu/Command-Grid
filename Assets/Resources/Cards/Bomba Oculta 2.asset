@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ecfd6abd1db8849ad741e2ab01324a, type: 3}
+  m_Name: Bomba Oculta 2
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardName: Bomba Oculta
+  type: 2
+  cost: 3
+  description: Coloca una bomba en la celda seleccionada. Se activa al pisarla.
+  effectType: 3
+  value: 20
+  prefab: {fileID: 0}

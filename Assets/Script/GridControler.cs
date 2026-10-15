@@ -44,7 +44,7 @@ public class GridControler : MonoBehaviour
 
     }
 
-    public bool AddObjectToGrid(GameObject obj, Vector3 gridPosition)
+    public bool AddObjectToGrid(GameObject obj, Vector3 gridPosition, PlayerResources owner)
     {
         if (gridPosition.x >= 0 && gridPosition.x < width &&
        gridPosition.z >= 0 && gridPosition.z < height)
@@ -58,6 +58,7 @@ public class GridControler : MonoBehaviour
                 GameObject newObj = Instantiate(obj, vec, Quaternion.identity);
                 newObj.transform.SetParent(transform);
                 gridObject.Add(newObj);
+                owner.RegisterUnit(newObj.gameObject);
                 cell.unitInCell = newObj;
                 cell.occupied = true;
                 return true;

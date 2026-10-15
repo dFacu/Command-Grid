@@ -1,5 +1,6 @@
 // Unit.cs (ejemplo simple)
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class Unit : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Unit : MonoBehaviour
     public int attack = 2;
     public int movementRange = 1;   // cuántas celdas puede moverse por turno
 
+    public GameObject marker;
 
     public bool hasMovedThisTurn;
 
@@ -46,6 +48,12 @@ public class Unit : MonoBehaviour
             new Vector2Int(targetCell.x, targetCell.z)
         );
         return dist <= 1;
+    }
+
+    public void SetSelected(bool isSelected)
+    {
+        if (marker != null)
+            marker.SetActive(isSelected);
     }
 
 }

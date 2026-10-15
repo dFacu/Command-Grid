@@ -15,11 +15,7 @@ public class PlayerResources : MonoBehaviour
 
     public Unit selectedUnit;
 
-    public List<GameObject> units = new List<GameObject>();
-
-    public Deck deck;
-
-    
+    public List<GameObject> units = new List<GameObject>();    
 
     private void Awake()
     {
@@ -32,9 +28,18 @@ public class PlayerResources : MonoBehaviour
         currentPoints = 0;
     }
 
+    public void SelectUnit(Unit unit)
+    {
+        // Si había una unidad seleccionada, desmarcarla
+        if (selectedUnit != null)
+            selectedUnit.SetSelected(false);
 
+        // Actualizar la nueva unidad seleccionada
+        selectedUnit = unit;
+        selectedUnit.SetSelected(true);
 
-    public void SelectUnit(Unit unit) { selectedUnit = unit; }
+        Debug.Log($"Unidad seleccionada: {selectedUnit.name}");
+    }
 
     public void TryMoveOrAttack(Vector3 targetCell)
     {
@@ -56,8 +61,10 @@ public class PlayerResources : MonoBehaviour
         foreach (GameObject unit in units)
         {
             var und = unit.GetComponent<Unit>();
+            und.marker.SetActive(false);
             und.hasMovedThisTurn = false;
             selectedUnit = null;
+           
         }
     }
 
@@ -137,19 +144,6 @@ public class PlayerResources : MonoBehaviour
             }
         }
         return null;
-    }
-
-
-    public void SpawnUnit(GameObject unit, Vector3 cell, PlayerResources owner)
-    {
-        Vector3 pos = new Vector3(cell.x, 0.5f, cell.y);
-
-        GameObject clon = Instantiate(unit, pos, Quaternion.identity);
-
-        var unitComp = clon.GetComponent<Unit>();
-        if (unitComp != null) unitComp.Initialize(owner);
-
-        owner.RegisterUnit(unitComp.gameObject);
     }
 }
 

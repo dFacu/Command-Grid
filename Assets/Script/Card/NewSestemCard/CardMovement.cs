@@ -82,6 +82,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
     private void TransitionToState0()
     {
         currentState = 0;
+        
         rectTransform.localScale = originalScale; //Reset Scale
         rectTransform.localRotation = originalRotation; //Reset Rotation
         rectTransform.localPosition = originalPosition; //Reset Position
@@ -181,12 +182,14 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                         Vector3 targetPos = cell.cellCoords;
 
 
-                        if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos))
+                        if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos, Manager.Instance.player))
                         {
                             HandManager handManager = FindAnyObjectByType<HandManager>();
                             handManager.cardsInHand.Remove(gameObject);
                             handManager.UpdateHandVisuals();
                             Debug.Log("character");
+                            DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                            discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
                             Manager.Instance.player.currentPoints -= card.cost;
                             Destroy(gameObject);
                         }
@@ -198,6 +201,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                         Renderer cellRender = cell.GetComponent<Renderer>();
                         cellRender.material.color = Color.azure;
                         Debug.Log($"Trampa colocada en {cell.name} con daño {cell.trapDamage}");
+                        DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                        discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
 
                         HandManager handManager = FindAnyObjectByType<HandManager>();
                         handManager.cardsInHand.Remove(gameObject);
@@ -227,12 +232,15 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                             {
                                 target.TakeDamage(card.value);
                                 Debug.Log($"{card.name} infligió {card.value} de daño a {target.name} (distancia: {distance})");
+                                DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                                discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
 
                                 HandManager handManager = FindAnyObjectByType<HandManager>();
                                 handManager.cardsInHand.Remove(gameObject);
                                 handManager.UpdateHandVisuals();
                                 Manager.Instance.player.currentPoints -= card.cost;
                                 Destroy(gameObject);
+
                             }
                             else
                             {
