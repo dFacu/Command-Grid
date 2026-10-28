@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class TileClick : MonoBehaviour, IPointerClickHandler
 {
-    public Vector3 cellCoords; // coordenadas lógicas del tile
+    public Vector2Int cellCoords; // coordenadas lógicas del tile
     public bool occupied = false;
 
     public GameObject unitInCell;
@@ -13,7 +13,16 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
     public int trapDamage = 0;
     private void Start()
     {
-        cellCoords = transform.position;
+        // Convertimos la posición del mundo a coordenadas de grilla
+        cellCoords = new Vector2Int(
+            Mathf.RoundToInt(transform.position.x),
+            Mathf.RoundToInt(transform.position.z)
+        );
+    }
+
+    public bool IsFree()
+    {
+        return !occupied && unitInCell == null;
     }
 
     private void OnTriggerEnter(Collider other)

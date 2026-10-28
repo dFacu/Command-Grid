@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerResources : MonoBehaviour
 {
     public static PlayerResources Instance;
 
+    public Owner ownerType; // Player o AI
     public string ownerName;
     public int currentPoints;
     public int maxPoints = 8;
@@ -41,7 +43,7 @@ public class PlayerResources : MonoBehaviour
         Debug.Log($"Unidad seleccionada: {selectedUnit.name}");
     }
 
-    public void TryMoveOrAttack(Vector3 targetCell)
+    public void TryMoveOrAttack(Vector2Int targetCell)
     {
         if (selectedUnit == null) return;
 
@@ -109,6 +111,7 @@ public class PlayerResources : MonoBehaviour
         ResetTurn();
     }
 
+    /*
     private GameObject FindUnitAtCell(Vector3 cell)
     {
         // Buscar en jugador
@@ -144,7 +147,7 @@ public class PlayerResources : MonoBehaviour
             }
         }
         return null;
-    }
+    }*/
 }
 
 

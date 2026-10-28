@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
@@ -29,14 +29,17 @@ public class GridControler : MonoBehaviour
         {
             for (int z = 0; z < height; z++)
             {
-                // Posici�n en el mundo directamente en positivo
-                Vector3 spawnPosition = new Vector3(x, 0, z);
+                // Coordenadas lógicas de la celda
+                Vector2Int spawnCoords = new Vector2Int(x, z);
 
-                GameObject gridCell = Instantiate(tile, spawnPosition, Quaternion.identity);
+                // Convertir a posición en el mundo (X–Z → Vector3)
+                Vector3 worldPos = new Vector3(spawnCoords.x, 0f, spawnCoords.y);
+
+                GameObject gridCell = Instantiate(tile, worldPos, Quaternion.identity);
                 gridCell.transform.SetParent(transform);
 
-                // Guardar coordenadas de celda en X�Z
-                gridCell.GetComponent<TileClick>().cellCoords = spawnPosition;
+                // Guardar coordenadas lógicas en el TileClick
+                gridCell.GetComponent<TileClick>().cellCoords = spawnCoords;
 
                 gridCells[x, z] = gridCell;
             }
@@ -44,26 +47,54 @@ public class GridControler : MonoBehaviour
 
     }
 
-    public bool AddObjectToGrid(GameObject obj, Vector3 gridPosition, PlayerResources owner)
+    public bool AddObjectToGrid(GameObject obj, Vector2Int gridPosition, PlayerResources owner)
     {
         if (gridPosition.x >= 0 && gridPosition.x < width &&
-       gridPosition.z >= 0 && gridPosition.z < height)
+            gridPosition.y >= 0 && gridPosition.y < height)
         {
-            TileClick cell = gridCells[(int)gridPosition.x, (int)gridPosition.z].GetComponent<TileClick>();
+            TileClick cell = gridCells[gridPosition.x, gridPosition.y].GetComponent<TileClick>();
 
-            if(cell.occupied) return false;
+            if (cell.occupied) return false;
             else
             {
-                Vector3 vec = new Vector3(cell.GetComponent<Transform>().position.x, 0.3f, cell.GetComponent<Transform>().position.z);
-                GameObject newObj = Instantiate(obj, vec, Quaternion.identity);
+                // Convertimos la celda lógica a posición en mundo
+                Vector3 worldPos = new Vector3(gridPosition.x, 0.3f, gridPosition.y);
+
+                GameObject newObj = Instantiate(obj, worldPos, Quaternion.identity);
                 newObj.transform.SetParent(transform);
+
                 gridObject.Add(newObj);
-                owner.RegisterUnit(newObj.gameObject);
+                owner.RegisterUnit(newObj);
+
                 cell.unitInCell = newObj;
                 cell.occupied = true;
+
                 return true;
             }
         }
         else return false;
     }
+
+    public List<TileClick> GetAreaTiles(Vector2Int centerCell, AreaShape shape, int size)
+    {
+        List<TileClick> tiles = new List<TileClick>();
+
+        // Siempre agregamos el centro
+        tiles.Add(gridCells[centerCell.x, centerCell.y].GetComponent<TileClick>());
+
+        if (shape == AreaShape.Cross)
+        {
+            if (centerCell.y + size < height)
+                tiles.Add(gridCells[centerCell.x, centerCell.y + size].GetComponent<TileClick>());
+            if (centerCell.y - size >= 0)
+                tiles.Add(gridCells[centerCell.x, centerCell.y - size].GetComponent<TileClick>());
+            if (centerCell.x + size < width)
+                tiles.Add(gridCells[centerCell.x + size, centerCell.y].GetComponent<TileClick>());
+            if (centerCell.x - size >= 0)
+                tiles.Add(gridCells[centerCell.x - size, centerCell.y].GetComponent<TileClick>());
+        }
+
+        return tiles;
+    }
+
 }

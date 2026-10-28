@@ -173,83 +173,117 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
             if (Physics.Raycast(ray, out hit))
             {
                 TileClick cell = hit.collider.GetComponent<TileClick>();
-                CardUI card = GetComponent<CardUI>();
+                Unit target = hit.collider.GetComponent<Unit>();
 
-                if (cell != null)
+                CardUI c = GetComponent<CardUI>();
+                CardSO card = c.cardData;
+
+                if (card != null)
                 {
-                    if ((card.effectType == EffectType.SpawnUnit))   // Invoca una unidad 
+                    bool ejecutada = CardExecutor.Instance.PlayExecuter(
+                        card,
+                        cell,
+                        target,
+                        Manager.Instance.player
+                    );
+
+                    if (ejecutada)
                     {
-                        Vector3 targetPos = cell.cellCoords;
-
-
-                        if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos, Manager.Instance.player))
-                        {
-                            HandManager handManager = FindAnyObjectByType<HandManager>();
-                            handManager.cardsInHand.Remove(gameObject);
-                            handManager.UpdateHandVisuals();
-                            Debug.Log("character");
-                            DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                            discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
-                            Manager.Instance.player.currentPoints -= card.cost;
-                            Destroy(gameObject);
-                        }
-                    }
-                    else if (card.effectType == EffectType.Trap)
-                    {
-                        cell.hasTrap = true;
-                        cell.trapDamage = card.value;
-                        Renderer cellRender = cell.GetComponent<Renderer>();
-                        cellRender.material.color = Color.azure;
-                        Debug.Log($"Trampa colocada en {cell.name} con daño {cell.trapDamage}");
-                        DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                        discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
-
                         HandManager handManager = FindAnyObjectByType<HandManager>();
                         handManager.cardsInHand.Remove(gameObject);
                         handManager.UpdateHandVisuals();
                         Manager.Instance.player.currentPoints -= card.cost;
                         Destroy(gameObject);
+
+                        Debug.Log("Carta ejecutada correctamente.");
                     }
+                } 
+                
+                /*
+                 if (cell != null)
+                 {
 
-                }
-                else
-                {
-                    if (card.effectType == EffectType.Damage)
-                    {
-                        Unit target = hit.collider.GetComponent<Unit>();
 
-                        if (target != null)
-                        {
-                            // Posición de la unidad seleccionada
-                            Vector3 attackerPos = Manager.Instance.player.selectedUnit.transform.position;
-                            Vector3 targetPos = target.transform.position;
 
-                            // Calcular distancia
-                            float distance = Vector3.Distance(attackerPos, targetPos);
 
-                            // Chequear si está dentro del rango permitido por la carta
-                            if (distance <= card.distance)
-                            {
-                                target.TakeDamage(card.value);
-                                Debug.Log($"{card.name} infligió {card.value} de daño a {target.name} (distancia: {distance})");
-                                DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                                discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
 
-                                HandManager handManager = FindAnyObjectByType<HandManager>();
-                                handManager.cardsInHand.Remove(gameObject);
-                                handManager.UpdateHandVisuals();
-                                Manager.Instance.player.currentPoints -= card.cost;
-                                Destroy(gameObject);
 
-                            }
-                            else
-                            {
-                                Debug.Log($"{card.name} no puede atacar: objetivo fuera de rango (distancia: {distance}, rango: {card.distance})");
-                            }
-                        }
-                    }
 
-                }
+                     if ((card.effectType == EffectType.SpawnUnit))   // Invoca una unidad 
+                     {
+                         Vector2Int targetPos = cell.cellCoords;
+
+
+                         if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos, Manager.Instance.player))
+                         {
+                             HandManager handManager = FindAnyObjectByType<HandManager>();
+                             handManager.cardsInHand.Remove(gameObject);
+                             handManager.UpdateHandVisuals();
+                             Debug.Log("character");
+                             DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                             discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
+                             Manager.Instance.player.currentPoints -= card.cost;
+                             Destroy(gameObject);
+                         }
+                     }
+                     else if (card.effectType == EffectType.Trap)
+                     {
+                         cell.hasTrap = true;
+                         cell.trapDamage = card.value;
+                         Renderer cellRender = cell.GetComponent<Renderer>();
+                         cellRender.material.color = Color.azure;
+                         Debug.Log($"Trampa colocada en {cell.name} con daño {cell.trapDamage}");
+                         DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                         discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
+
+                         HandManager handManager = FindAnyObjectByType<HandManager>();
+                         handManager.cardsInHand.Remove(gameObject);
+                         handManager.UpdateHandVisuals();
+                         Manager.Instance.player.currentPoints -= card.cost;
+                         Destroy(gameObject);
+                     }
+
+                 }
+                 else
+                 {
+                     if (card.effectType == EffectType.Damage)
+                     {
+                         Unit target = hit.collider.GetComponent<Unit>();
+
+                         if (target != null)
+                         {
+                             // Posición de la unidad seleccionada
+                             Vector3 attackerPos = Manager.Instance.player.selectedUnit.transform.position;
+                             Vector3 targetPos = target.transform.position;
+
+                             // Calcular distancia
+                             float distance = Vector3.Distance(attackerPos, targetPos);
+
+                             // Chequear si está dentro del rango permitido por la carta
+                             if (distance <= card.distance)
+                             {
+                                 target.TakeDamage(card.value);
+                                 Debug.Log($"{card.name} infligió {card.value} de daño a {target.name} (distancia: {distance})");
+                                 DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
+                                 discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
+
+                                 HandManager handManager = FindAnyObjectByType<HandManager>();
+                                 handManager.cardsInHand.Remove(gameObject);
+                                 handManager.UpdateHandVisuals();
+                                 Manager.Instance.player.currentPoints -= card.cost;
+                                 Destroy(gameObject);
+
+                             }
+                             else
+                             {
+                                 Debug.Log($"{card.name} no puede atacar: objetivo fuera de rango (distancia: {distance}, rango: {card.distance})");
+                             }
+                         }
+                     }
+
+
+                 }
+               */
             }
 
             TransitionToState0();

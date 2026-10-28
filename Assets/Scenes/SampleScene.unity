@@ -447,6 +447,7 @@ GameObject:
   - component: {fileID: 568002725}
   - component: {fileID: 568002727}
   - component: {fileID: 568002726}
+  - component: {fileID: 568002728}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -481,17 +482,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f37ddb51f0330744a345347f477604d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IAEnemy
-  resources: {fileID: 568002727}
-  resourcesPlayer: {fileID: 802497290}
-  DeckCargado:
-  - {fileID: 11400000, guid: 916bd8714ac3bc3498deb45bc455b23c, type: 2}
-  - {fileID: 11400000, guid: c30e7e5f929dfe948be80895646aef9a, type: 2}
-  - {fileID: 11400000, guid: e8765856d600aff408d9c0f4991a1684, type: 2}
-  - {fileID: 11400000, guid: c0482cf6dfaf5f44b918d9acb9ce0032, type: 2}
-  - {fileID: 11400000, guid: e8765856d600aff408d9c0f4991a1684, type: 2}
-  - {fileID: 11400000, guid: e8765856d600aff408d9c0f4991a1684, type: 2}
-  - {fileID: 11400000, guid: 916bd8714ac3bc3498deb45bc455b23c, type: 2}
   hand: []
+  deckManager: {fileID: 568002728}
+  maxHandSize: 6
+  currentMana: 0
+  maxMana: 3
+  playDelay: 0.5
 --- !u!114 &568002727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,12 +500,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2660dddbc93de56429a81ad270e5ca87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
+  ownerType: 1
   ownerName: Enemy
   currentPoints: 0
   maxPoints: 0
   turnNumber: 1
   selectedUnit: {fileID: 0}
   units: []
+--- !u!114 &568002728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568002723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9affefee4805284096c91ff9d395559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIDeckManager
+  allCards: []
+  deck: []
+  discard: []
+  startingHandSize: 6
+  maxHandSize: 12
+  currentHandSize: 0
 --- !u!1 &651600249
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,6 +661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2660dddbc93de56429a81ad270e5ca87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerResources
+  ownerType: 0
   ownerName: Player
   currentPoints: 0
   maxPoints: 8
@@ -1501,6 +1517,8 @@ GameObject:
   - component: {fileID: 1938737407}
   - component: {fileID: 1938737406}
   - component: {fileID: 1938737408}
+  - component: {fileID: 1938737409}
+  - component: {fileID: 1938737410}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1556,6 +1574,33 @@ MonoBehaviour:
   turnDuration: 30
   player: {fileID: 802497290}
   enemy: {fileID: 568002727}
+--- !u!114 &1938737409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938737405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2bfe8bdd2086649bda5b0b41633c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardManager
+  tilesParent: {fileID: 0}
+  origin: {x: 0, y: 0}
+  spacing: 1
+--- !u!114 &1938737410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938737405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e396f3fcc5181d44c886ef611413bb97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardExecutor
 --- !u!1 &2146184332
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,6 @@ public class UnitSelector : MonoBehaviour, IPointerClickHandler
         if (TurnManager.Instance.currentTurn != TurnManager.TurnState.PlayerTurn) return;
 
         PlayerResources.Instance.SelectUnit(unit);
-        Debug.Log($"Unidad selecionada: {unit.name}");
+       // Debug.Log($"Unidad selecionada: {unit.name}");
     }
 }

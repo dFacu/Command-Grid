@@ -19,9 +19,9 @@ public class Manager : MonoBehaviour
     void Start()
     {
         GridControler.Instance.DashboardGenerator();
-        GridControler.Instance.AddObjectToGrid(Comandante_1, new Vector3(0, 0.5f, 0), player);
-        iAEnemy.InitPlayer(iAEnemy.DeckCargado);
-        GridControler.Instance.AddObjectToGrid(Comandante_2, new Vector3(4, 0.5f, 4), enemy);
+        GridControler.Instance.AddObjectToGrid(Comandante_1, new Vector2Int(0, 0), player);
+        GridControler.Instance.AddObjectToGrid(Comandante_2, new Vector2Int(4, 4), enemy);
+        iAEnemy.InitPlayer(iAEnemy.deckManager.allCards);
     }
 
 

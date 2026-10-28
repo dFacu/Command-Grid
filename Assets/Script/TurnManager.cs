@@ -48,7 +48,7 @@ public class TurnManager : MonoBehaviour
         StartEnemyTurn();
     }
 
-    void EndEnemyTurn()
+   public void EndEnemyTurn()
     {
         enemy.EndTurn();
         StartPlayerTurn();
@@ -66,15 +66,13 @@ public class TurnManager : MonoBehaviour
 
 
 
-    void StartEnemyTurn()
+   public void StartEnemyTurn()
     {
-        IAEnemy.Instance.PlayTurn();
         currentTurn = TurnState.EnemyTurn;
-        enemy.StartTurn(false); // false = enemigo
+        enemy.StartTurn(false); // recursos del enemigo
         turnTimer = turnDuration;
 
-        Invoke("EndEnemyTurn", 2f);
+        IAEnemy.Instance.PlayTurn(); // IA arranca su lógica
     }
-
 
 }

@@ -11,7 +11,7 @@ public class CardUI : MonoBehaviour
     public TextMeshProUGUI nameText;
 
     public string description;
-    public TextMeshProUGUI descriptionText;
+    //public TextMeshProUGUI descriptionText;
 
     public int cost;
     public TextMeshProUGUI costText;
@@ -19,6 +19,10 @@ public class CardUI : MonoBehaviour
     public GameObject powerPanel;
     public int value;
     public TextMeshProUGUI valueText;
+
+    public GameObject healPanel;
+    public int valueH;
+    public TextMeshProUGUI valueHText;
 
     public CardType type;
 
@@ -28,18 +32,21 @@ public class CardUI : MonoBehaviour
 
     public GameObject Prefab;
 
+    public Image imagen;
+
     public int distance;
     public void LoadCard(CardSO card)
     {
         cardData = card;
 
+        imagen.sprite = card.image;
         Prefab = card.prefab;
 
         name = card.name;
         nameText.text = card.name.ToString();
 
         description = card.description;
-        descriptionText.text = description.ToString();
+       // descriptionText.text = description.ToString();
 
         cost = card.cost;
         costText.text = cost.ToString();
@@ -54,6 +61,16 @@ public class CardUI : MonoBehaviour
         {
             powerPanel.SetActive(true);
             valueText.text = value.ToString();
+        }
+
+        if (valueH == 0)
+        {
+            healPanel.SetActive(false);
+        }
+        else
+        {
+            healPanel.SetActive(true);
+            valueHText.text = value.ToString();
         }
 
         type = card.type;

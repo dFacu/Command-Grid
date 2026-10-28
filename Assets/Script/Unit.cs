@@ -1,10 +1,13 @@
 // Unit.cs (ejemplo simple)
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 
 public class Unit : MonoBehaviour
 {
     public PlayerResources owner;
+
+    public Element HasElement;
     public int health = 5;
     public int attack = 2;
     public int movementRange = 1;   // cuántas celdas puede moverse por turno
@@ -14,13 +17,17 @@ public class Unit : MonoBehaviour
     public bool hasMovedThisTurn;
 
 
-    public Vector3 currentCell;
+    public Vector2Int currentCell;
+
+    // Lista de efectos activos
+   // private List<StatusEffect> activeEffects = new List<StatusEffect>();
+
 
     public void Initialize(PlayerResources ownerRef) {  owner = ownerRef; }
 
-    public void MoveTo(Vector3 cell)
+    public void MoveTo(Vector2Int cell)
     {
-        Vector3 pos = new Vector3(cell.x, 0.5f, cell.z);
+        Vector3 pos = new Vector3(cell.x, 0.5f, cell.y);
 
         transform.position = pos;
         currentCell = cell;
@@ -40,15 +47,13 @@ public class Unit : MonoBehaviour
 
     public bool IsInAttackRange(Unit target)
     {
-        Vector3Int unitCell = Vector3Int.RoundToInt(this.currentCell - new Vector3(0, 0.5f, 0));
-        Vector3Int targetCell = Vector3Int.RoundToInt(target.currentCell - new Vector3(0, 0.5f, 0));
+        // currentCell y target.currentCell deberían ser Vector2Int
+        int dist = Mathf.Abs(this.currentCell.x - target.currentCell.x) +
+                   Mathf.Abs(this.currentCell.y - target.currentCell.y);
 
-        float dist = Vector2Int.Distance(
-            new Vector2Int(unitCell.x, unitCell.z),
-            new Vector2Int(targetCell.x, targetCell.z)
-        );
+        // Usamos distancia Manhattan (más común en grids)
         return dist <= 1;
-    }
+    }   
 
     public void SetSelected(bool isSelected)
     {
