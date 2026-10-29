@@ -97,7 +97,9 @@ public class IAEnemy : MonoBehaviour
             card,
             tile,
             target,
-            TurnManager.Instance.enemy
+            Manager.Instance.enemy,
+            Manager.Instance.player
+
         );
 
         if (success)

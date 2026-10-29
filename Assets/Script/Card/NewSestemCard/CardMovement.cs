@@ -180,11 +180,20 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
 
                 if (card != null)
                 {
+                    Unit sourceUnit = Manager.Instance.player.selectedUnit;
+
+                    if (sourceUnit != null && sourceUnit.isPetrified)
+                    {
+                        Debug.Log("No podés usar una unidad petrificada para esta carta.");
+                        return;
+                    }
+
                     bool ejecutada = CardExecutor.Instance.PlayExecuter(
                         card,
                         cell,
                         target,
-                        Manager.Instance.player
+                        Manager.Instance.player,
+                         Manager.Instance.enemy
                     );
 
                     if (ejecutada)

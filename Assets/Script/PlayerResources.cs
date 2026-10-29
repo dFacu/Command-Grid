@@ -47,6 +47,12 @@ public class PlayerResources : MonoBehaviour
     {
         if (selectedUnit == null) return;
 
+        if (selectedUnit.isPetrified)
+        {
+            Debug.Log("Esta unidad está petrificada y no puede moverse.");
+            return;
+        }
+
         if (!selectedUnit.hasMovedThisTurn)
         {
             selectedUnit.MoveTo(targetCell);
@@ -111,43 +117,7 @@ public class PlayerResources : MonoBehaviour
         ResetTurn();
     }
 
-    /*
-    private GameObject FindUnitAtCell(Vector3 cell)
-    {
-        // Buscar en jugador
-        foreach (GameObject u in PlayerResources.Instance.units)
-        {
-            Vector3 unitCell = u.GetComponent<Unit>().currentCell;
-
-            // Normalizar altura: (y - 0.5) → redondear
-            int unitY = Mathf.RoundToInt(unitCell.y - 0.5f);
-            int cellY = Mathf.RoundToInt(cell.y - 0.5f);
-
-            if (Mathf.RoundToInt(unitCell.x) == Mathf.RoundToInt(cell.x) &&
-                unitY == cellY &&
-                Mathf.RoundToInt(unitCell.z) == Mathf.RoundToInt(cell.z))
-            {
-                return u;
-            }
-        }
-
-        // Buscar en IA
-        foreach (GameObject u in IAEnemy.Instance.resources.units)
-        {
-            Vector3 unitCell = u.GetComponent<Unit>().currentCell;
-
-            int unitY = Mathf.RoundToInt(unitCell.y - 0.5f);
-            int cellY = Mathf.RoundToInt(cell.y - 0.5f);
-
-            if (Mathf.RoundToInt(unitCell.x) == Mathf.RoundToInt(cell.x) &&
-                unitY == cellY &&
-                Mathf.RoundToInt(unitCell.z) == Mathf.RoundToInt(cell.z))
-            {
-                return u;
-            }
-        }
-        return null;
-    }*/
+    
 }
 
 

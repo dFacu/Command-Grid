@@ -3,6 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GUILayout;
 
+public enum ZoneEffectType
+{
+    None,
+    AttackBonus,
+    Heal,
+    ReduceMovement,
+    AttackReduction
+}
 public enum CardType 
 { 
     Unit,
@@ -12,6 +20,7 @@ public enum CardType
 public enum EffectType 
 {
     SpawnUnit,
+    Petrify,
     Heal,
     Damage,
     Trap,
@@ -49,7 +58,7 @@ public class CardSO : ScriptableObject
     [TextArea(4,4)] public string description;
 
     public EffectType effectType;
-    public List<Element> elements;
+    public Element elements;
     public Element targetElement;
 
     public int value;       // daño, curación, buff
@@ -59,7 +68,22 @@ public class CardSO : ScriptableObject
     public AreaShape areaShape;
     public int areaSize;
 
+    [Header("Efectos de zona")]
+    public ZoneEffectType effectForFavoredElement;
+    public Element favoredElement;
+
+    public ZoneEffectType effectForOtherElements;
+    public Element excludedElement;
+
+
+
     public GameObject prefab; // para unidades
 
+
+
+
+
     public string rarity;     // común, rara, épica
+
+
 }

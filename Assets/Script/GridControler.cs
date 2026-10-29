@@ -61,6 +61,9 @@ public class GridControler : MonoBehaviour
                 Vector3 worldPos = new Vector3(gridPosition.x, 0.3f, gridPosition.y);
 
                 GameObject newObj = Instantiate(obj, worldPos, Quaternion.identity);
+                var unitComp = newObj.GetComponent<Unit>();
+                if (unitComp != null) unitComp.Initialize(owner);
+
                 newObj.transform.SetParent(transform);
 
                 gridObject.Add(newObj);

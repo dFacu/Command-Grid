@@ -26,7 +26,7 @@ public class CardUI : MonoBehaviour
 
     public CardType type;
 
-    public List<Element> elements;
+    public Element elements;
 
     public EffectType effectType;
 
