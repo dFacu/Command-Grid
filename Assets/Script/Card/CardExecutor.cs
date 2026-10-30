@@ -158,16 +158,18 @@ public class CardExecutor : MonoBehaviour
             return false;
         }
 
-        // Aplicar daño.
-        int bonusAtaque = GetZoneAttackBonus(sourceUnit);
+        // Calcular bonus de ataque de las zonas activas.
+        int bonusAtaque = EffectZone.GetTotalAttackBonus(sourceUnit);
+
         int damageTotal = card.value + bonusAtaque;
 
+        // Aplicar daño.
         target.TakeDamage(damageTotal);
 
         Debug.Log(
-            $"{sourceUnit.name} infligió {damageTotal} de daño a " +
-            $"{target.name}. Daño base: {card.value}, " +
-            $"bonus de zona: {bonusAtaque}."
+            $"Daño base: {card.value} | " +
+            $"Bonus de zona: {bonusAtaque} | " +
+            $"Daño total: {damageTotal}"
         );
 
         return true;

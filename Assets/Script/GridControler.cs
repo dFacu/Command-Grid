@@ -58,10 +58,12 @@ public class GridControler : MonoBehaviour
             else
             {
                 // Convertimos la celda lógica a posición en mundo
-                Vector3 worldPos = new Vector3(gridPosition.x, 0.3f, gridPosition.y);
+                Vector3 worldPos = new Vector3(gridPosition.x, 0.5f, gridPosition.y);
 
                 GameObject newObj = Instantiate(obj, worldPos, Quaternion.identity);
                 var unitComp = newObj.GetComponent<Unit>();
+                unitComp.currentCell = gridPosition; 
+                
                 if (unitComp != null) unitComp.Initialize(owner);
 
                 newObj.transform.SetParent(transform);

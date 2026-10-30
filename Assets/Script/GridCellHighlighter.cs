@@ -1,39 +1,67 @@
+
 using UnityEngine;
 using static TurnManager;
 
 public class GridCellHighlighter : MonoBehaviour
 {
-    private MeshRenderer _material;
+    private MeshRenderer meshRenderer;
+    private Color originalColor;
 
     public Color highlightColor = Color.cadetBlue;
     public Color posColor = Color.green;
     public Color negColor = Color.red;
 
-    private Color originalColor;
-
     public TileClick gridCell;
+
     private void Awake()
     {
-        _material = GetComponent<MeshRenderer>();  
+        meshRenderer = GetComponent<MeshRenderer>();
         gridCell = GetComponent<TileClick>();
-        originalColor = _material.materials[0].color;
+
+        originalColor = meshRenderer.material.color;
     }
 
     private void OnMouseEnter()
     {
-        if(TurnManager.Instance.currentTurn  == TurnState.EnemyTurn)
+        if (TurnManager.Instance.currentTurn == TurnState.EnemyTurn)
         {
-            _material.materials[0].color = highlightColor;
+            meshRenderer.material.color = highlightColor;
+            return;
         }
-        else if (gridCell.occupied || gridCell.cellCoords.x > 1)
+
+        Unit selectedUnit =  Manager.Instance.player.selectedUnit;
+
+        if (selectedUnit == null)
         {
-            _material.materials[0].color = negColor;
+            meshRenderer.material.color = highlightColor;
+            return;
         }
-        else _material.materials[0].color = posColor;
+
+        if (gridCell.occupied)
+        {
+            meshRenderer.material.color = negColor;
+            return;
+        }
+
+        int distance = Mathf.Abs(
+            gridCell.cellCoords.x - selectedUnit.currentCell.x
+        ) + Mathf.Abs(
+            gridCell.cellCoords.y - selectedUnit.currentCell.y
+        );
+
+        int availableMovement = EffectZone.IsInsideMovementPenalty(
+            selectedUnit,
+            gridCell.cellCoords
+        )
+        ? Mathf.CeilToInt(selectedUnit.movementRange * 0.5f)
+        : selectedUnit.movementRange;
+
+        meshRenderer.material.color =
+            distance <= availableMovement ? posColor : negColor;
     }
 
     private void OnMouseExit()
     {
-        _material.materials[0].color = originalColor;
+        meshRenderer.material.color = originalColor;
     }
 }

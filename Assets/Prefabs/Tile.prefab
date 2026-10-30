@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a92473fed29ab499da7df12d14e799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileClick
-  cellCoords: {x: 0, y: 0, z: 0}
+  cellCoords: {x: 0, y: 0}
   occupied: 0
   unitInCell: {fileID: 0}
   hasTrap: 0
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5089332291960931758}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07cb2e6fb7ba5c347961bb983e764364, type: 3}
   m_Name: 
@@ -486,6 +486,7 @@ MonoBehaviour:
   highlightColor: {r: 0.372549, g: 0.6196079, b: 0.627451, a: 1}
   posColor: {r: 0, g: 1, b: 0, a: 1}
   negColor: {r: 1, g: 0, b: 0, a: 1}
+  gridCell: {fileID: 0}
 --- !u!1 &5431825706974813107
 GameObject:
   m_ObjectHideFlags: 0

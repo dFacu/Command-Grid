@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EffectZone : MonoBehaviour
@@ -10,6 +11,16 @@ public class EffectZone : MonoBehaviour
     private TileClick centerTile;
     private bool initialized;
 
+
+    [Header("Visualización de la zona")]
+    public Color zoneColor = new Color(0.2f, 0.6f, 1f, 0.4f);
+
+    private Renderer[] affectedRenderers;
+    private MaterialPropertyBlock propertyBlock;
+
+    private Dictionary<Renderer, Color> originalColors =
+    new Dictionary<Renderer, Color>();
+
     public void Initialize(CardSO card, TileClick tile)
     {
         if (card == null || tile == null)
@@ -20,10 +31,9 @@ public class EffectZone : MonoBehaviour
         turnsRemaining = card.duration;
         initialized = true;
 
-        Debug.Log(
-            $"Zona {card.cardName} creada en {tile.name}. " +
-            $"Duración: {turnsRemaining} turnos."
-        );
+        PaintZone();
+
+        Debug.Log($"Zona {card.cardName} creada.");
     }
 
     // Comprueba si una unidad está dentro de la zona.
@@ -60,17 +70,22 @@ public class EffectZone : MonoBehaviour
     // Bonus de ataque para las unidades del elemento favorecido.
     public int GetAttackBonus(Unit unit)
     {
-        if (!ContainsUnit(unit) || cardData == null)
+        if (unit == null || cardData == null)
             return 0;
 
-        if (cardData.favoredElement == unit.HasElement &&
-            cardData.effectForFavoredElement ==
-            ZoneEffectType.AttackBonus)
-        {
-            return cardData.value;
-        }
+        // La unidad debe estar dentro de la zona.
+        if (!ContainsUnit(unit))
+            return 0;
 
-        return 0;
+        // Solo beneficia al elemento configurado.
+        if (unit.HasElement != cardData.favoredElement)
+            return 0;
+
+        // Verificamos que la zona tenga bonus de ataque.
+        if (cardData.effectForFavoredElement != ZoneEffectType.AttackBonus)
+            return 0;
+
+        return cardData.value;
     }
 
     // Multiplicador de movimiento para los demás elementos.
@@ -100,7 +115,10 @@ public class EffectZone : MonoBehaviour
 
         if (turnsRemaining <= 0)
         {
-            Debug.Log($"La zona {cardData.cardName} terminó.");
+            RestoreZoneColors();
+
+            Debug.Log($"La zona {cardData.cardName} desapareció.");
+
             Destroy(gameObject);
         }
     }
@@ -141,5 +159,124 @@ public class EffectZone : MonoBehaviour
             0,
             Mathf.FloorToInt(unit.movementRange * multiplier)
         );
+    }
+
+    // Comprueba si una casilla está dentro del área de la zona.
+    public bool ContainsCell(Vector2Int cell)
+    {
+        if (!initialized || centerTile == null || cardData == null)
+            return false;
+
+        int radius = Mathf.Max(0, (cardData.areaSize - 1) / 2);
+
+        int dx = Mathf.Abs(cell.x - centerTile.cellCoords.x);
+        int dy = Mathf.Abs(cell.y - centerTile.cellCoords.y);
+
+        return dx <= radius && dy <= radius;
+    }
+
+
+    // Comprueba si una unidad recibe penalización de movimiento
+    // al intentar llegar a una casilla.
+    public static bool IsInsideMovementPenalty(Unit unit, Vector2Int destination)
+    {
+        if (unit == null)
+            return false;
+
+        EffectZone[] zones =
+            FindObjectsByType<EffectZone>(FindObjectsSortMode.None);
+
+        foreach (EffectZone zone in zones)
+        {
+            if (zone == null || zone.cardData == null)
+                continue;
+
+            // La unidad debe ser de un elemento distinto al favorecido.
+            if (unit.HasElement == zone.cardData.favoredElement)
+                continue;
+
+            // La zona debe tener configurada la reducción de movimiento.
+            if (zone.cardData.effectForOtherElements !=
+                ZoneEffectType.ReduceMovement)
+                continue;
+
+            if (zone.ContainsCell(destination))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static int GetTotalAttackBonus(Unit unit)
+    {
+        if (unit == null)
+            return 0;
+
+        int totalBonus = 0;
+
+        EffectZone[] zones =
+            FindObjectsByType<EffectZone>(FindObjectsSortMode.None);
+
+        foreach (EffectZone zone in zones)
+        {
+            if (zone == null)
+                continue;
+
+            totalBonus += zone.GetAttackBonus(unit);
+        }
+
+        return totalBonus;
+    }
+
+    private void PaintZone()
+    {
+        if (centerTile == null)
+            return;
+
+        TileClick[] cells =
+            FindObjectsByType<TileClick>(FindObjectsSortMode.None);
+
+        propertyBlock = new MaterialPropertyBlock();
+
+        foreach (TileClick cell in cells)
+        {
+            if (cell == null || !ContainsCell(cell.cellCoords))
+                continue;
+
+            Renderer cellRenderer = cell.GetComponent<Renderer>();
+
+            if (cellRenderer == null)
+                continue;
+
+            // Guardar el color original.
+            if (!originalColors.ContainsKey(cellRenderer))
+            {
+                Color originalColor = cellRenderer.material.HasProperty("_BaseColor")
+                    ? cellRenderer.material.GetColor("_BaseColor")
+                    : cellRenderer.material.color;
+
+                originalColors.Add(cellRenderer, originalColor);
+            }
+
+            cellRenderer.GetPropertyBlock(propertyBlock);
+
+            propertyBlock.SetColor("_Color", zoneColor);
+            propertyBlock.SetColor("_BaseColor", zoneColor);
+
+            cellRenderer.SetPropertyBlock(propertyBlock);
+        }
+    }
+
+    private void RestoreZoneColors()
+    {
+        foreach (var item in originalColors)
+        {
+            if (item.Key == null)
+                continue;
+
+            item.Key.SetPropertyBlock(null);
+        }
+
+        originalColors.Clear();
     }
 }

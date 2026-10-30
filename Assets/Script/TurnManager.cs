@@ -48,12 +48,22 @@ public class TurnManager : MonoBehaviour
         StartEnemyTurn();
     }
 
-   public void EndEnemyTurn()
+    public void EndEnemyTurn()
     {
         enemy.EndTurn();
+
+        // Reducir la duración de las zonas activas.
+        EffectZone[] zones =
+            FindObjectsByType<EffectZone>(FindObjectsSortMode.None);
+
+        foreach (EffectZone zone in zones)
+        {
+            if (zone != null)
+                zone.EndTurn();
+        }
+
         StartPlayerTurn();
     }
-
 
     void StartPlayerTurn()
     {

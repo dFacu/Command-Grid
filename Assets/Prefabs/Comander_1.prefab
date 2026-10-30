@@ -219,12 +219,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Commander
   owner: {fileID: 0}
+  HasElement: 0
+  maxHealth: 15
   health: 5
   attack: 2
   movementRange: 1
   marker: {fileID: 2354521953857287925}
   hasMovedThisTurn: 0
-  currentCell: {x: 0, y: 0, z: 0}
+  currentCell: {x: 0, y: 0}
+  isPetrified: 0
+  petrifiedTurns: 0
   commanderName: Comandante
   specialAbilityCost: 3
 --- !u!54 &-5747374173505727954

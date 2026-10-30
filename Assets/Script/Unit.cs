@@ -1,5 +1,6 @@
 // Unit.cs (ejemplo simple)
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -32,10 +33,15 @@ public class Unit : MonoBehaviour
 
     public void MoveTo(Vector2Int cell)
     {
-        int availableMovement = EffectZone.GetMovementRange(this);
-
         int distance = Mathf.Abs(cell.x - currentCell.x)
                      + Mathf.Abs(cell.y - currentCell.y);
+
+        int availableMovement = movementRange;
+
+        if (EffectZone.IsInsideMovementPenalty(this, cell))
+        {
+            availableMovement = Mathf.FloorToInt(movementRange * 0.5f);
+        }
 
         if (distance > availableMovement)
         {
@@ -47,6 +53,7 @@ public class Unit : MonoBehaviour
 
         transform.position = pos;
         currentCell = cell;
+        hasMovedThisTurn = true;
     }
 
     public void TakeDamage(int dmg)

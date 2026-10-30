@@ -27,9 +27,11 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
 
     private void OnTriggerEnter(Collider other)
     {
+        occupied = true;
+
         if (other.gameObject.CompareTag("Comandante"))
         {
-            occupied = true;
+
 
             // Si hay trampa → explota
             if (hasTrap)
@@ -47,7 +49,6 @@ public class TileClick : MonoBehaviour, IPointerClickHandler
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Comandante"))
             occupied = false;
     }
 

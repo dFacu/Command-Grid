@@ -56,7 +56,6 @@ public class PlayerResources : MonoBehaviour
         if (!selectedUnit.hasMovedThisTurn)
         {
             selectedUnit.MoveTo(targetCell);
-            selectedUnit.hasMovedThisTurn = true;
         }
         else
         {
