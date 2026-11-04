@@ -32,11 +32,21 @@ public class PlayerResources : MonoBehaviour
 
     public void SelectUnit(Unit unit)
     {
-        // Si había una unidad seleccionada, desmarcarla
+        if (unit == null)
+            return;
+
+        // Evitar seleccionar unidades del enemigo.
+        if (unit.owner != TurnManager.Instance.player)
+        {
+            Debug.Log("No podés seleccionar unidades enemigas.");
+            return;
+        }
+
+        // Si había una unidad seleccionada, desmarcarla.
         if (selectedUnit != null)
             selectedUnit.SetSelected(false);
 
-        // Actualizar la nueva unidad seleccionada
+        // Actualizar la nueva unidad seleccionada.
         selectedUnit = unit;
         selectedUnit.SetSelected(true);
 

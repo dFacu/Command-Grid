@@ -119,6 +119,11 @@ public class IAEnemy : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
 
+        // Primero mover las unidades.
+        yield return StartCoroutine(MoveUnitsRoutine());
+
+        // Después comenzar a jugar cartas.
+
         bool playedSomething = true;
         int safety = 0;
 
@@ -190,6 +195,96 @@ public class IAEnemy : MonoBehaviour
         if (card.cost > currentMana) score -= 1000;
 
         return score;
+    }
+
+    private IEnumerator MoveUnitsRoutine()
+    {
+        PlayerResources enemy = TurnManager.Instance.enemy;
+        PlayerResources player = TurnManager.Instance.player;
+
+
+        foreach (GameObject obj in enemy.units)
+        {
+            if (obj == null)
+                continue;
+
+            Unit unit = obj.GetComponent<Unit>();
+
+            if (unit == null || unit.isPetrified)
+                continue;
+
+            Unit closestEnemy = null;
+            float closestDistance = float.MaxValue;
+
+            // Buscar el enemigo más cercano.
+            foreach (GameObject targetObj in player.units)
+            {
+                if (targetObj == null)
+                    continue;
+
+                Unit target = targetObj.GetComponent<Unit>();
+
+                if (target == null)
+                    continue;
+
+                float distance = Vector2.Distance(
+                    unit.currentCell,
+                    target.currentCell
+                );
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestEnemy = target;
+                }
+            }
+
+            if (closestEnemy == null)
+                continue;
+
+            // Buscar una casilla libre que acerque a la unidad.
+            TileClick bestTile = null;
+            float bestDistance = closestDistance;
+
+            TileClick[] cells =
+                FindObjectsByType<TileClick>(FindObjectsSortMode.None);
+
+            foreach (TileClick cell in cells)
+            {
+                if (cell == null || cell.occupied)
+                    continue;
+
+                int movement = unit.movementRange;
+
+                if (EffectZone.IsInsideMovementPenalty(unit, cell.cellCoords))
+                    movement = Mathf.CeilToInt(movement * 0.5f);
+
+                int distanceFromUnit =
+                    Mathf.Abs(cell.cellCoords.x - unit.currentCell.x) +
+                    Mathf.Abs(cell.cellCoords.y - unit.currentCell.y);
+
+                if (distanceFromUnit == 0 || distanceFromUnit > movement)
+                    continue;
+
+                float distanceToEnemy = Vector2.Distance(
+                    cell.cellCoords,
+                    closestEnemy.currentCell
+                );
+
+                if (distanceToEnemy < bestDistance)
+                {
+                    bestDistance = distanceToEnemy;
+                    bestTile = cell;
+                }
+            }
+
+            if (bestTile != null)
+            {
+                unit.MoveTo(bestTile.cellCoords);
+
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
     }
 
 }

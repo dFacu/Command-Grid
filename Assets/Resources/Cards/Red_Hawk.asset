@@ -18,12 +18,16 @@ MonoBehaviour:
   cost: 1
   description: Coloca una bomba en la celda seleccionada. Se activa al pisarla.
   effectType: 3
-  elements: 1
+  elements: 0
   targetElement: 0
   value: 3
   distance: 1
   duration: 0
   areaShape: 0
   areaSize: 0
+  effectForFavoredElement: 0
+  favoredElement: 0
+  effectForOtherElements: 0
+  excludedElement: 0
   prefab: {fileID: 0}
   rarity: cc

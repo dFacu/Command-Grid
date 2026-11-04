@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Commander
   owner: {fileID: 0}
-  HasElement: 0
+  HasElement: 2
   maxHealth: 15
   health: 5
   attack: 2
