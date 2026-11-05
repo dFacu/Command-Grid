@@ -21,6 +21,8 @@ public class EffectZone : MonoBehaviour
     private Dictionary<Renderer, Color> originalColors =
     new Dictionary<Renderer, Color>();
 
+    public GameObject effect;
+
     public void Initialize(CardSO card, TileClick tile)
     {
         if (card == null || tile == null)
@@ -31,8 +33,8 @@ public class EffectZone : MonoBehaviour
         turnsRemaining = card.duration;
         initialized = true;
 
-        PaintZone();
-
+       // PaintZone();
+        effect.GetComponent<ParticleSystem>().Play();
         Debug.Log($"Zona {card.cardName} creada.");
     }
 

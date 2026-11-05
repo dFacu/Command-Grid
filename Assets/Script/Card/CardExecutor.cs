@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using static UnityEngine.GraphicsBuffer;
 
 public class CardExecutor : MonoBehaviour
 {
@@ -53,11 +54,15 @@ public class CardExecutor : MonoBehaviour
 
         bool creada = GridControler.Instance.AddObjectToGrid(card.prefab, tile.cellCoords, owner);
 
+
+
         if (!creada)
         {
             Debug.Log("No se pudo invocar la unidad en esa casilla.");
             return false;
         }
+
+        PlayCardEffect(card, tile.transform.position);
 
         Debug.Log($"Unidad invocada en {tile.cellCoords}");
 
@@ -124,7 +129,7 @@ public class CardExecutor : MonoBehaviour
         }
 
         // Comprobar que el elemento de la unidad permita usar la carta.
-        if (sourceUnit.HasElement != card.elements)
+        if (sourceUnit.HasElement != card.elements && sourceUnit.HasElement != Element.All)
         {
             Debug.Log(
                 $"{sourceUnit.name} no puede usar {card.cardName}. " +
@@ -165,6 +170,10 @@ public class CardExecutor : MonoBehaviour
 
         // Aplicar daño.
         target.TakeDamage(damageTotal);
+
+
+        PlayCardEffect(card, target.transform.position);
+
 
         Debug.Log(
             $"Daño base: {card.value} | " +
@@ -319,7 +328,7 @@ public class CardExecutor : MonoBehaviour
             return false;
         }
 
-        if (sourceUnit.HasElement != card.elements)
+        if (sourceUnit.HasElement != card.elements && sourceUnit.HasElement != Element.All)
         {
             Debug.Log("Esta unidad no puede utilizar esa carta.");
             return false;
@@ -351,6 +360,8 @@ public class CardExecutor : MonoBehaviour
             spawnPosition,
             Quaternion.identity
         );
+
+        PlayCardEffect(card, tile.transform.position);
 
         EffectZone zone = zoneObject.GetComponent<EffectZone>();
 
@@ -390,6 +401,20 @@ public class CardExecutor : MonoBehaviour
         }
 
         return totalBonus;
+    }
+
+    private void PlayCardEffect(CardSO card, Vector3 position)
+    {
+        if (card == null || card.particlePrefab == null)
+            return;
+
+        GameObject effect = Instantiate(
+            card.particlePrefab,
+            position,
+            Quaternion.identity
+        );
+
+        Destroy(effect, 5f);
     }
 
 }

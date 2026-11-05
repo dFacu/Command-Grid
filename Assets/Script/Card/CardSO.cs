@@ -31,9 +31,11 @@ public enum EffectType
 public enum Element
 {
     None,
+    All,
     Fire,
     Water,
-    Air
+    Air,
+    Earth
 }
 
 public enum AreaShape
@@ -84,6 +86,9 @@ public class CardSO : ScriptableObject
 
 
     public string rarity;     // común, rara, épica
+
+    [Header("Efecto visual")]
+    public GameObject particlePrefab;
 
 
 }

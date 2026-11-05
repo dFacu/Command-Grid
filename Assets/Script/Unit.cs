@@ -11,7 +11,6 @@ public class Unit : MonoBehaviour
     public Element HasElement;
     public int maxHealth = 15;
     public int health;
-    public int attack = 2;
     public int movementRange = 1;   // cuántas celdas puede moverse por turno
 
     public GameObject marker;

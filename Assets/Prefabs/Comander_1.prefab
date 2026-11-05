@@ -219,10 +219,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Commander
   owner: {fileID: 0}
-  HasElement: 2
+  HasElement: 1
   maxHealth: 15
   health: 5
-  attack: 2
   movementRange: 1
   marker: {fileID: 2354521953857287925}
   hasMovedThisTurn: 0

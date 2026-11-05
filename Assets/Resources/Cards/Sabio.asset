@@ -29,5 +29,5 @@ MonoBehaviour:
   favoredElement: 0
   effectForOtherElements: 0
   excludedElement: 0
-  prefab: {fileID: 3512970408017019576, guid: 0ea9a378adb96fe4595724618467c8a6, type: 3}
+  prefab: {fileID: 3512970408017019576, guid: e222388a5b2f1e04aacf03fa80976fca, type: 3}
   rarity: 

@@ -1,0 +1,246 @@
+fileFormatVersion: 2
+guid: 370b349ca2c5f2642bb722f3d5f65378
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "Hoja de sprites del druida m\xEDstico_0"
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 12
+        width: 412
+        height: 700
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0e8c6b6d6622fa4b9c4e481cd48b34b
+      internalID: -1983857999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Hoja de sprites del druida m\xEDstico_2"
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 11
+        width: 398
+        height: 705
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b82a290120e5f9a489aeb7c05e527ab6
+      internalID: -400805096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Hoja de sprites del druida m\xEDstico_5"
+      rect:
+        serializedVersion: 2
+        x: 1135
+        y: 12
+        width: 400
+        height: 701
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f41aa2779440aa74c8660d85632f35e6
+      internalID: 454369088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Hoja de sprites del druida m\xEDstico_6"
+      rect:
+        serializedVersion: 2
+        x: 1694
+        y: 11
+        width: 397
+        height: 701
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69c763cfe17433041a603943e536cdec
+      internalID: -347442829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 8e55ee6e06a9fb14a871897f6ce080cc
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      "Hoja de sprites del druida m\xEDstico_0": -1983857999
+      "Hoja de sprites del druida m\xEDstico_1": 1975480128
+      "Hoja de sprites del druida m\xEDstico_10": 708954133
+      "Hoja de sprites del druida m\xEDstico_11": -2047994439
+      "Hoja de sprites del druida m\xEDstico_12": -1626024205
+      "Hoja de sprites del druida m\xEDstico_13": 1489275663
+      "Hoja de sprites del druida m\xEDstico_14": 54901694
+      "Hoja de sprites del druida m\xEDstico_15": 654078242
+      "Hoja de sprites del druida m\xEDstico_16": -2079996472
+      "Hoja de sprites del druida m\xEDstico_17": -1899700720
+      "Hoja de sprites del druida m\xEDstico_18": -1945867250
+      "Hoja de sprites del druida m\xEDstico_19": 1036836633
+      "Hoja de sprites del druida m\xEDstico_2": -400805096
+      "Hoja de sprites del druida m\xEDstico_20": -738731
+      "Hoja de sprites del druida m\xEDstico_21": 2074064662
+      "Hoja de sprites del druida m\xEDstico_22": -206546718
+      "Hoja de sprites del druida m\xEDstico_23": -961092929
+      "Hoja de sprites del druida m\xEDstico_24": -1583183169
+      "Hoja de sprites del druida m\xEDstico_25": -1738187855
+      "Hoja de sprites del druida m\xEDstico_3": 2109521453
+      "Hoja de sprites del druida m\xEDstico_4": 327873167
+      "Hoja de sprites del druida m\xEDstico_5": 454369088
+      "Hoja de sprites del druida m\xEDstico_6": -347442829
+      "Hoja de sprites del druida m\xEDstico_7": -296334250
+      "Hoja de sprites del druida m\xEDstico_8": -503868573
+      "Hoja de sprites del druida m\xEDstico_9": 110565308
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
