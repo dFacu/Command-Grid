@@ -19,12 +19,17 @@ MonoBehaviour:
   description: 'Efecto: convierte en piedra a los enemigos alcanzados durante 3 turnos,
     impidiendo que se muevan o utilicen habilidades.'
   effectType: 1
-  elements: 
+  elements: 0
   targetElement: 0
   value: 3
   distance: 0
   duration: 0
   areaShape: 0
   areaSize: 1
+  effectForFavoredElement: 0
+  favoredElement: 0
+  effectForOtherElements: 0
+  excludedElement: 0
   prefab: {fileID: 0}
   rarity: Rara
+  particlePrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}

@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UIElements;
 
 public class CardExecutor : MonoBehaviour
 {
@@ -54,8 +55,6 @@ public class CardExecutor : MonoBehaviour
 
         bool creada = GridControler.Instance.AddObjectToGrid(card.prefab, tile.cellCoords, owner);
 
-
-
         if (!creada)
         {
             Debug.Log("No se pudo invocar la unidad en esa casilla.");
@@ -95,6 +94,9 @@ public class CardExecutor : MonoBehaviour
             unit.Petrify(card.value);
             affectedAny = true;
         }
+
+        Vector3 newVector3 = new Vector3(4,4,4);
+        PlayCardEffect(card, newVector3);
 
         if (affectedAny)
         {
@@ -171,8 +173,8 @@ public class CardExecutor : MonoBehaviour
         // Aplicar daño.
         target.TakeDamage(damageTotal);
 
-
-        PlayCardEffect(card, target.transform.position);
+        Vector3 newVector3 = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z - 0.2f);
+        PlayCardEffect(card, newVector3);
 
 
         Debug.Log(
@@ -241,6 +243,8 @@ public class CardExecutor : MonoBehaviour
         // Aplicar curación.
         target.Heal(card.value);
 
+        Vector3 newVector3 = new Vector3(target.transform.position.x, target.transform.position.y - 0.2f, target.transform.position.z);
+        PlayCardEffect(card, newVector3);
         Debug.Log(
             $"{sourceUnit.name} usó {card.cardName} para curar a " +
             $"{target.name} por {card.value} puntos."

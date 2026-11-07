@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class TurnManager : MonoBehaviour
 {
@@ -63,8 +65,18 @@ public class TurnManager : MonoBehaviour
             if (zone != null)
                 zone.EndTurn();
         }
-
         StartPlayerTurn();
+
+      
+        foreach (GameObject unit in player.units)
+        {
+            unit.GetComponent<Unit>().ReducePetrification();
+        }
+
+        foreach (GameObject unit in enemy.units)
+        {
+            unit.GetComponent<Unit>().ReducePetrification();
+        }
     }
 
     void StartPlayerTurn()

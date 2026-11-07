@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
 public class GridControler : MonoBehaviour
@@ -66,10 +67,22 @@ public class GridControler : MonoBehaviour
                 
                 if (unitComp != null) unitComp.Initialize(owner);
 
+                // Determinar hacia dónde mira según quién invoca
+                SpriteDirection direccion = newObj.GetComponent<SpriteDirection>();
+
+                if (direccion != null)
+                {
+                    if (owner.ownerType == Owner.Player)
+                        direccion.MirarDerecha();
+                    else
+                        direccion.MirarIzquierda();
+                }
+
                 newObj.transform.SetParent(transform);
 
                 gridObject.Add(newObj);
                 owner.RegisterUnit(newObj);
+
 
                 cell.unitInCell = newObj;
                 cell.occupied = true;
