@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 1420680401115109841}
   - component: {fileID: 7455222222582530968}
   m_Layer: 0
-  m_Name: Grol
+  m_Name: "Heraldo del Vac\xEDo"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,8 +251,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   owner: {fileID: 0}
-  HasElement: 1
-  maxHealth: 20
+  HasElement: 2
+  maxHealth: 6
   health: 0
   movementRange: 1
   marker: {fileID: 513453185102261487}

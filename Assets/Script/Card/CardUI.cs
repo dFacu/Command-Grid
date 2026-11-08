@@ -11,7 +11,7 @@ public class CardUI : MonoBehaviour
     public TextMeshProUGUI nameText;
 
     public string description;
-    //public TextMeshProUGUI descriptionText;
+    public TextMeshProUGUI descriptionText;
 
     public int cost;
     public TextMeshProUGUI costText;
@@ -46,7 +46,7 @@ public class CardUI : MonoBehaviour
         nameText.text = card.name.ToString();
 
         description = card.description;
-       // descriptionText.text = description.ToString();
+        descriptionText.text = description.ToString();
 
         cost = card.cost;
         costText.text = cost.ToString();

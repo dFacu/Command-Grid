@@ -193,7 +193,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                         cell,
                         target,
                         Manager.Instance.player,
-                         Manager.Instance.enemy
+                         Manager.Instance.enemy,
+                         Manager.Instance.player.selectedUnit
+                         
                     );
 
                     if (ejecutada)

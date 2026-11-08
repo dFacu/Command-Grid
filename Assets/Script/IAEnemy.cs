@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -19,9 +20,20 @@ public class IAEnemy : MonoBehaviour
     public float playDelay = 0.5f;
 
 
+    public TextMeshProUGUI textPoint;
+    public TextMeshProUGUI textLifeComander;
+
+    private bool lastCardPlayed;
+
     void Awake()
     {
         Instance = this;
+    }
+
+    private void Update()
+    {
+        textLifeComander.text = Manager.Instance.enemy.units[0].GetComponent<Unit>().health.ToString();
+        textPoint.text = Manager.Instance.enemy.currentPoints.ToString();
     }
 
     public void InitPlayer(List<CardSO> startingDeck)
@@ -61,35 +73,47 @@ public class IAEnemy : MonoBehaviour
 
     private IEnumerator PlayCardRoutine(CardSO card)
     {
+        lastCardPlayed = false;
+
         TileClick tile = null;
         Unit target = null;
+        Unit sourceUnit = null;
 
         switch (card.effectType)
         {
             case EffectType.SpawnUnit:
-                tile = BoardManager.Instance.FindFreeTile(TurnManager.Instance.enemy);
+
+                tile = BoardManager.Instance.FindFreeTile(
+                    Manager.Instance.enemy
+                );
 
                 if (tile == null)
                 {
-                    Debug.Log("La IA no encontró una casilla libre para invocar.");
+                    Debug.LogWarning("IA: No encontró una casilla para invocar.");
                     yield break;
                 }
-                break;
-                /*
-            case EffectType.Trap:
-                tile = BoardManager.Instance.FindTrapTile(Manager.Instance.enemy);
-                if (tile == null)
-                    yield break;
+
+                Debug.Log($"IA: Invocando {card.cardName} en {tile.cellCoords}");
+
                 break;
 
             case EffectType.Damage:
+
                 target = BoardManager.Instance.FindBestEnemy(
                     Owner.AI,
-                    card.distance
-                );*/
+                    card.distance,
+                    card,
+                    out sourceUnit
+                );
 
-                if (target == null)
+                if (target == null || sourceUnit == null)
+                {
+                    Debug.LogWarning("IA: No encontró un objetivo para atacar.");
                     yield break;
+                }
+
+                Debug.Log($"IA: {sourceUnit.name} ataca a {target.name}");
+
                 break;
         }
 
@@ -98,18 +122,19 @@ public class IAEnemy : MonoBehaviour
             tile,
             target,
             Manager.Instance.enemy,
-            Manager.Instance.player
-
+            Manager.Instance.player,
+            sourceUnit
         );
 
         if (success)
         {
             currentMana -= card.cost;
-
             deckManager.Discard(card);
             hand.Remove(card);
 
-            Debug.Log($"La IA jugó la carta: {card.name}");
+            lastCardPlayed = true;
+
+            Debug.Log($"IA ejecutó correctamente: {card.cardName}");
         }
 
         yield return new WaitForSeconds(playDelay);
@@ -146,8 +171,14 @@ public class IAEnemy : MonoBehaviour
 
             if (best != null)
             {
+                Debug.Log(
+                    $"IA eligió: {best.cardName} | " +
+                    $"Efecto: {best.effectType} | " +
+                    $"Coste: {best.cost} | Maná: {currentMana}"
+                );
+
                 yield return StartCoroutine(PlayCardRoutine(best));
-                playedSomething = true;
+                playedSomething = lastCardPlayed;
             }
 
             safety++;
@@ -162,8 +193,30 @@ public class IAEnemy : MonoBehaviour
 
     private bool CanPlayCard(CardSO card)
     {
-        if (card.cost > currentMana) return false;
-        if (card.effectType == EffectType.SpawnUnit && !BoardManager.Instance.HasBoardSpace(Owner.AI)) return false;
+        if (card.cost > currentMana)
+            return false;
+
+        if (card.effectType == EffectType.SpawnUnit)
+        {
+            if (BoardManager.Instance.FindFreeTile(Manager.Instance.enemy) == null)
+                return false;
+        }
+
+        if (card.effectType == EffectType.Damage)
+        {
+            Unit source;
+
+            Unit target = BoardManager.Instance.FindBestEnemy(
+                Owner.AI,
+                card.distance,
+                card,
+                out source
+            );
+
+            if (target == null || source == null)
+                return false;
+        }
+
         return true;
     }
     private int EvaluateCard(CardSO card)
@@ -287,4 +340,26 @@ public class IAEnemy : MonoBehaviour
         }
     }
 
+    private Unit GetSourceUnitForCard(CardSO card)
+    {
+        PlayerResources enemy = TurnManager.Instance.enemy;
+
+        foreach (GameObject obj in enemy.units)
+        {
+            if (obj == null) continue;
+
+            Unit unit = obj.GetComponent<Unit>();
+
+            if (unit == null || unit.isPetrified)
+                continue;
+
+            if (unit.HasElement != Element.All &&
+                unit.HasElement != card.elements)
+                continue;
+
+            return unit;
+        }
+
+        return null;
+    }
 }

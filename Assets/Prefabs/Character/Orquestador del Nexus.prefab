@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 1420680401115109841}
   - component: {fileID: 1266677624676226441}
   m_Layer: 0
-  m_Name: Jack
+  m_Name: Orquestador del Nexus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,9 +252,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   owner: {fileID: 0}
   HasElement: 1
-  maxHealth: 20
+  maxHealth: 8
   health: 0
-  movementRange: 1
+  movementRange: 2
   marker: {fileID: 513453185102261487}
   hasMovedThisTurn: 0
   currentCell: {x: 0, y: 0}

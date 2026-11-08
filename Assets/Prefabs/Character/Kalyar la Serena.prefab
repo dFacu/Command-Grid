@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 1420680401115109841}
   - component: {fileID: 6076256431815247172}
   m_Layer: 0
-  m_Name: Cami
+  m_Name: Kalyar la Serena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -365,10 +365,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   owner: {fileID: 0}
-  HasElement: 5
-  maxHealth: 20
+  HasElement: 3
+  maxHealth: 8
   health: 0
-  movementRange: 1
+  movementRange: 3
   marker: {fileID: 513453185102261487}
   hasMovedThisTurn: 0
   currentCell: {x: 0, y: 0}

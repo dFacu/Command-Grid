@@ -15,7 +15,7 @@ public class CardExecutor : MonoBehaviour
         Instance = this;
     }
 
-    public bool PlayExecuter(CardSO card, TileClick tile, Unit target, PlayerResources owner, PlayerResources targetOwner)
+    public bool PlayExecuter(CardSO card, TileClick tile, Unit target, PlayerResources owner, PlayerResources targetOwner, Unit sourceUnit)
     {
         if (card == null)
             return false;
@@ -27,13 +27,13 @@ public class CardExecutor : MonoBehaviour
             case EffectType.Petrify:
                 return PetrifyEnemies(card, owner, targetOwner);
             case EffectType.Damage:
-                return DamageEnemy(card, target, owner);
+                return DamageEnemy(card, target, owner, sourceUnit);
             case EffectType.Heal:
-                return HealUnit(card, target, owner);
+                return HealUnit(card, target, owner, sourceUnit);
             case EffectType.Trap:
-                return PlaceTrap(card, tile, owner);
+                return PlaceTrap(card, tile, owner, sourceUnit);
             case EffectType.Terrain:
-                return PlaceZone(card, tile, owner);
+                return PlaceZone(card, tile, owner, sourceUnit);
 
 
 
@@ -109,13 +109,10 @@ public class CardExecutor : MonoBehaviour
         return affectedAny;
     }
 
-    private bool DamageEnemy(CardSO card, Unit target, PlayerResources owner)
+    private bool DamageEnemy(CardSO card, Unit target, PlayerResources owner, Unit sourceUnit)
     {
         if (card == null || target == null || owner == null)
             return false;
-
-        // La unidad seleccionada es quien lanza la carta.
-        Unit sourceUnit = owner.selectedUnit;
 
         if (sourceUnit == null)
         {
@@ -186,13 +183,10 @@ public class CardExecutor : MonoBehaviour
         return true;
     }
 
-    private bool HealUnit(CardSO card, Unit target, PlayerResources owner)
+    private bool HealUnit(CardSO card, Unit target, PlayerResources owner, Unit sourceUnit)
     {
         if (card == null || target == null || owner == null)
             return false;
-
-        // Unidad que utiliza la carta.
-        Unit sourceUnit = owner.selectedUnit;
 
         if (sourceUnit == null)
         {
@@ -253,7 +247,7 @@ public class CardExecutor : MonoBehaviour
         return true;
     }
 
-    private bool PlaceTrap(CardSO card, TileClick tile, PlayerResources owner)
+    private bool PlaceTrap(CardSO card, TileClick tile, PlayerResources owner, Unit sourceUnit)
     {
         if (card == null || tile == null || owner == null)
             return false;
@@ -263,9 +257,6 @@ public class CardExecutor : MonoBehaviour
             Debug.Log("Esta casilla ya tiene una trampa.");
             return false;
         }
-
-        // Validar la unidad que lanza la carta.
-        Unit sourceUnit = owner.selectedUnit;
 
         if (sourceUnit == null)
         {
@@ -313,12 +304,10 @@ public class CardExecutor : MonoBehaviour
         return true;
     }
 
-    private bool PlaceZone( CardSO card, TileClick tile, PlayerResources owner)
+    private bool PlaceZone( CardSO card, TileClick tile, PlayerResources owner, Unit sourceUnit)
     {
         if (card == null || tile == null || owner == null)
             return false;
-
-        Unit sourceUnit = owner.selectedUnit;
 
         if (sourceUnit == null)
         {

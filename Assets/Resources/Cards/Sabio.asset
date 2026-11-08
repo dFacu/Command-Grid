@@ -18,9 +18,9 @@ MonoBehaviour:
   cost: 2
   description: 'Invoca unidad '
   effectType: 0
-  elements: 0
+  elements: 5
   targetElement: 0
-  value: 0
+  value: 12
   distance: 0
   duration: 0
   areaShape: 0
@@ -30,4 +30,5 @@ MonoBehaviour:
   effectForOtherElements: 0
   excludedElement: 0
   prefab: {fileID: 3512970408017019576, guid: e222388a5b2f1e04aacf03fa80976fca, type: 3}
-  rarity: 
+  rarity: cc
+  particlePrefab: {fileID: 0}

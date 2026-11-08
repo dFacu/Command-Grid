@@ -146,56 +146,68 @@ public class BoardManager : MonoBehaviour
 
     // --- Helpers extra para IA ---
 
-    public Unit FindBestEnemy(Owner owner, float range)
+    public Unit FindBestEnemy(
+    Owner owner,
+    float range,
+    CardSO card,
+    out Unit sourceUnit)
     {
-        Unit best = null;
+        sourceUnit = null;
+
+        PlayerResources allies =
+            owner == Owner.AI
+            ? TurnManager.Instance.enemy
+            : TurnManager.Instance.player;
+
+        PlayerResources enemies =
+            owner == Owner.AI
+            ? TurnManager.Instance.player
+            : TurnManager.Instance.enemy;
+
+        Unit bestTarget = null;
         int lowestHP = int.MaxValue;
 
-        foreach (var kvp in occupied)
+        foreach (GameObject allyObj in allies.units)
         {
-            Unit enemy = kvp.Value.GetComponent<Unit>();
+            if (allyObj == null) continue;
 
-            if (enemy == null || enemy.owner == null)
+            Unit ally = allyObj.GetComponent<Unit>();
+
+            if (ally == null || ally.isPetrified)
                 continue;
 
-            // Buscar solamente unidades enemigas.
-            if (enemy.owner.ownerType == owner)
+            if (ally.HasElement != Element.All &&
+                ally.HasElement != card.elements)
                 continue;
 
-            // Comprobar si alguna unidad aliada puede alcanzar al enemigo.
-            bool inRange = false;
-
-            foreach (var allyEntry in occupied)
+            foreach (GameObject enemyObj in enemies.units)
             {
-                Unit ally = allyEntry.Value.GetComponent<Unit>();
+                if (enemyObj == null) continue;
 
-                if (ally == null || ally.owner == null)
-                    continue;
+                Unit enemy = enemyObj.GetComponent<Unit>();
 
-                if (ally.owner.ownerType != owner)
-                    continue;
+                if (enemy == null) continue;
 
                 float distance = Vector3.Distance(
                     ally.transform.position,
                     enemy.transform.position
                 );
 
-                if (distance <= range)
-                {
-                    inRange = true;
-                    break;
-                }
-            }
+                if (distance > range)
+                    continue;
 
-            if (inRange && enemy.health < lowestHP)
-            {
-                lowestHP = enemy.health;
-                best = enemy;
+                if (enemy.health < lowestHP)
+                {
+                    lowestHP = enemy.health;
+                    bestTarget = enemy;
+                    sourceUnit = ally;
+                }
             }
         }
 
-        return best;
+        return bestTarget;
     }
+
     public TileClick FindTrapTile(PlayerResources owner)
     {
         Vector2Int cell = FindStrategicTrapCell(owner);
