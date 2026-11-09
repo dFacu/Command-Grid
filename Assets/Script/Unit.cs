@@ -1,4 +1,5 @@
 // Unit.cs (ejemplo simple)
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class Unit : MonoBehaviour
 
     public bool isPetrified = false;
     public int petrifiedTurns = 0;
+
+    public int shield = 0;
 
     private void Start()
     {
@@ -114,6 +117,51 @@ public class Unit : MonoBehaviour
         health = Mathf.Min(health + amount, maxHealth);
 
         Debug.Log($"{name} ahora tiene {health}/{maxHealth} de vida.");
+    }
+
+    public void AddShield(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        shield += amount;
+
+        Debug.Log($"{name} recibió {amount} de escudo. Escudo actual: {shield}");
+    }
+
+    public IEnumerator ForcedMoveTo(
+        Vector2Int cell,
+        float duration = 0.2f)
+    {
+        Vector3 startPosition = transform.position;
+
+        Vector3 targetPosition = new Vector3(
+            cell.x,
+            0.5f,
+            cell.y
+        );
+
+        currentCell = cell;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Pequeño impulso vertical durante el empuje.
+            float height = Mathf.Sin(t * Mathf.PI) * 0.35f;
+
+            transform.position =
+                Vector3.Lerp(startPosition, targetPosition, t)
+                + Vector3.up * height;
+
+            yield return null;
+        }
+
+        transform.position = targetPosition;
     }
 }
 

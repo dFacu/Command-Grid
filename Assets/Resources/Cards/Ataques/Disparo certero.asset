@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ecfd6abd1db8849ad741e2ab01324a, type: 3}
+  m_Name: Disparo certero
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardName: Disparo certero
+  type: 1
+  image: {fileID: 21300000, guid: 772b5b3bf0b81c649a9992041d8f6e60, type: 3}
+  cost: 2
+  description: 
+  effectType: 3
+  elements: 0
+  targetElement: 0
+  value: 2
+  distance: 3
+  duration: 0
+  areaShape: 0
+  areaSize: 0
+  effectForFavoredElement: 0
+  favoredElement: 0
+  effectForOtherElements: 0
+  excludedElement: 0
+  prefab: {fileID: 0}
+  rarity: C
+  particlePrefab: {fileID: 2504214343621411470, guid: 3ed0d324122d7b24eaec75c55c74aafc, type: 3}

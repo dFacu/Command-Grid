@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62ecfd6abd1db8849ad741e2ab01324a, type: 3}
-  m_Name: Red_Hawk
+  m_Name: NewCard
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardName: Red_Hawk
-  type: 1
-  image: {fileID: 21300000, guid: 7d36dc3fadce40d4a98a8016b41a640a, type: 3}
-  cost: 1
-  description: Coloca una bomba en la celda seleccionada. Se activa al pisarla.
-  effectType: 3
-  elements: 0
+  cardName: 
+  type: 0
+  image: {fileID: 21300000, guid: 357a1f6e32cd6c84380d5ecadae17985, type: 3}
+  cost: 3
+  description: 
+  effectType: 10
+  elements: 4
   targetElement: 0
   value: 3
-  distance: 7
+  distance: 4
   duration: 0
-  areaShape: 0
-  areaSize: 0
+  areaShape: 3
+  areaSize: 2
   effectForFavoredElement: 0
   favoredElement: 0
   effectForOtherElements: 0
   excludedElement: 0
   prefab: {fileID: 0}
-  rarity: cc
-  particlePrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  rarity: R
+  particlePrefab: {fileID: 4772634663576830964, guid: e1385af346f4e624eb313ec1ea4fcd7e, type: 3}

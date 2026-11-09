@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62ecfd6abd1db8849ad741e2ab01324a, type: 3}
-  m_Name: "Regeneraci\xF3n Celular"
+  m_Name: Flecha de la Tormenta
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
-  cardName: "Regeneraci\xF3n Celular"
+  cardName: Flecha de la Tormenta
   type: 1
-  image: {fileID: 21300000, guid: 9257a5546ca73a74ba67dd180c834bc3, type: 3}
-  cost: 2
-  description: Invoca un mago al tablero.
-  effectType: 2
-  elements: 1
+  image: {fileID: 21300000, guid: 2ec10d81a7fcb4d4d8a6e8c41347a455, type: 3}
+  cost: 4
+  description: ....
+  effectType: 3
+  elements: 4
   targetElement: 0
-  value: 3
-  distance: 0
+  value: 5
+  distance: 9
   duration: 0
   areaShape: 0
   areaSize: 0
@@ -30,5 +30,5 @@ MonoBehaviour:
   effectForOtherElements: 0
   excludedElement: 0
   prefab: {fileID: 0}
-  rarity: 
-  particlePrefab: {fileID: 3280519133390621005, guid: a71be3e7990efb040a07565c43cbb198, type: 3}
+  rarity: R
+  particlePrefab: {fileID: 1141330259687333427, guid: 6718dc24203da53468af9ada8fef7d6d, type: 3}

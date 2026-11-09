@@ -75,8 +75,10 @@ public class PlayerResources : MonoBehaviour
 
     public void ResetTurn()
     {
+        units.RemoveAll(unit => unit == null);
         foreach (GameObject unit in units)
         {
+
             var und = unit.GetComponent<Unit>();
             und.marker.SetActive(false);
             und.hasMovedThisTurn = false;

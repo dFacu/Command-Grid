@@ -26,7 +26,10 @@ public enum EffectType
     Trap,
     Buff,
     Debuff,
-    Terrain
+    Terrain,
+    DamageArea,
+    Shield,
+    Knockback
 }
 public enum Element
 {
