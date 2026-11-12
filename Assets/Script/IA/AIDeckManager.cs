@@ -21,13 +21,24 @@ public class AIDeckManager : MonoBehaviour
 
     private void Start()
     {
-        //Load all card assets from the Resources folder
-        CardSO[] cards = Resources.LoadAll<CardSO>("Cards");
+        InitializeDeck();
+    }
 
-        //Add the loaded cards to the allCards list
-        allCards.AddRange(cards);
+    public void InitializeDeck()
+    {
+        deck.Clear();
+        discard.Clear();
 
+        // Copiamos las cartas configuradas en el Inspector.
+        deck.AddRange(allCards);
+
+        // Eliminamos referencias vacías, por seguridad.
+        deck.RemoveAll(card => card == null);
+
+        // Mezclamos el mazo.
         ShuffleDeck();
+
+        Debug.Log($"Mazo de IA inicializado. Cartas disponibles: {deck.Count}");
     }
 
 

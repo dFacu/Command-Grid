@@ -5,12 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.XR;
+using static AIAnalyzer;
 using static UnityEngine.UI.GridLayoutGroup;
 
 public class IAEnemy : MonoBehaviour
 {
 
     public static IAEnemy Instance;
+    public AIAnalyzer aiAnalyzer;
 
     public List<CardSO> hand = new List<CardSO>();
     public AIDeckManager deckManager;
@@ -28,6 +30,7 @@ public class IAEnemy : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        aiAnalyzer = new AIAnalyzer();
     }
 
     private void Update()
@@ -83,28 +86,54 @@ public class IAEnemy : MonoBehaviour
         {
             case EffectType.SpawnUnit:
 
-                tile = BoardManager.Instance.FindFreeTile(
-                    Manager.Instance.enemy
-                );
+                AIAnalyzer.AISpawnOption spawn =
+                    aiAnalyzer.FindBestSpawnPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
 
-                if (tile == null)
+                if (spawn == null)
                 {
-                    Debug.LogWarning("IA: No encontró una casilla para invocar.");
+                    Debug.LogWarning("IA: No encontró una posición para invocar.");
                     yield break;
                 }
 
-                Debug.Log($"IA: Invocando {card.cardName} en {tile.cellCoords}");
+                tile = spawn.tile;
+
+                Debug.Log(
+                    $"IA: Invocará {card.cardName} en {tile.cellCoords}. " +
+                    $"Score: {spawn.score}"
+                );
 
                 break;
 
             case EffectType.Damage:
 
-                target = BoardManager.Instance.FindBestEnemy(
-                    Owner.AI,
-                    card.distance,
-                    card,
-                    out sourceUnit
+                AIAnalyzer.AIAttackOption attack =
+                    aiAnalyzer.FindBestDamagePlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (attack == null)
+                {
+                    Debug.LogWarning("IA: No encontró un ataque conveniente.");
+                    yield break;
+                }
+
+                sourceUnit = attack.sourceUnit;
+                target = attack.target;
+
+                Debug.Log(
+                    $"IA eligió atacar con {sourceUnit.name} " +
+                    $"a {target.name}. " +
+                    $"Daño esperado: {attack.expectedDamage} | " +
+                    $"Puntuación: {attack.score}"
                 );
+
+                break;
 
                 if (target == null || sourceUnit == null)
                 {
@@ -115,6 +144,127 @@ public class IAEnemy : MonoBehaviour
                 Debug.Log($"IA: {sourceUnit.name} ataca a {target.name}");
 
                 break;
+
+            case EffectType.Heal:
+
+                AIAnalyzer.AIHealOption heal =
+                    aiAnalyzer.FindBestHealPlay(
+                        card,
+                        Manager.Instance.enemy
+                    );
+
+                if (heal == null)
+                {
+                    Debug.LogWarning("IA: No encontró una unidad para curar.");
+                    yield break;
+                }
+
+                target = heal.target;
+                sourceUnit = heal.sourceUnit;
+
+                Debug.Log(
+                    $"IA: {sourceUnit.name} cura a {target.name} " +
+                    $"por {heal.actualHeal} puntos. Score: {heal.score}"
+                );
+
+                break;
+
+            case EffectType.Shield:
+
+                AIAnalyzer.AIShieldOption shield =
+                    aiAnalyzer.FindBestShieldPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (shield == null)
+                {
+                    Debug.LogWarning("IA: No encontró una unidad para proteger.");
+                    yield break;
+                }
+
+                target = shield.target;
+                sourceUnit = shield.sourceUnit;
+
+                Debug.Log(
+                    $"IA: {sourceUnit.name} aplica escudo a {target.name}. " +
+                    $"Escudo actual: {target.shield} | Score: {shield.score}"
+                );
+
+                break;
+
+            case EffectType.DamageArea:
+
+                AIAnalyzer.AIAreaOption area =
+                    aiAnalyzer.FindBestDamageAreaPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (area == null)
+                {
+                    Debug.LogWarning("IA: No encontró un área válida para atacar.");
+                    yield break;
+                }
+
+                tile = area.targetTile;
+                sourceUnit = area.sourceUnit;
+
+                Debug.Log(
+                    $"IA: {sourceUnit.name} lanza un ataque de área en " +
+                    $"{tile.cellCoords}. Enemigos alcanzados: {area.enemiesHit} | " +
+                    $"Eliminaciones posibles: {area.enemiesKilled} | " +
+                    $"Score: {area.score}"
+                );
+
+                break;
+
+            case EffectType.Petrify:
+
+                AIAnalyzer.AIPetrifyOption petrify =
+                    aiAnalyzer.FindBestPetrifyPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (petrify == null)
+                {
+                    Debug.LogWarning("IA: No hay enemigos para petrificar.");
+                    yield break;
+                }
+
+                Debug.Log(
+                    $"IA: Utilizará Petrify sobre {petrify.enemiesAffected} enemigos. " +
+                    $"Score: {petrify.score}"
+                );
+
+                break;
+
+            case EffectType.Terrain:
+                {
+                    AITerrainOption terrain = aiAnalyzer.FindBestTerrainPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                    if (terrain == null)
+                        yield break;
+
+                    tile = terrain.targetTile;
+                    sourceUnit = terrain.sourceUnit;
+
+                    Debug.Log(
+                        $"IA: colocando terreno en {tile.cellCoords}. " +
+                        $"Aliados beneficiados: {terrain.alliesBenefited}. " +
+                        $"Enemigos afectados: {terrain.enemiesAffected}."
+                    );
+
+                    break;
+                }
         }
 
         bool success = CardExecutor.Instance.PlayExecuter(
@@ -198,24 +348,95 @@ public class IAEnemy : MonoBehaviour
 
         if (card.effectType == EffectType.SpawnUnit)
         {
-            if (BoardManager.Instance.FindFreeTile(Manager.Instance.enemy) == null)
+            AIAnalyzer.AISpawnOption spawn =
+                aiAnalyzer.FindBestSpawnPlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                );
+
+            if (spawn == null)
                 return false;
         }
 
         if (card.effectType == EffectType.Damage)
         {
-            Unit source;
+            AIAnalyzer.AIAttackOption attack =
+                aiAnalyzer.FindBestDamagePlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                );
 
-            Unit target = BoardManager.Instance.FindBestEnemy(
-                Owner.AI,
-                card.distance,
-                card,
-                out source
-            );
-
-            if (target == null || source == null)
+            if (attack == null)
                 return false;
         }
+
+        if (card.effectType == EffectType.Heal)
+        {
+            AIAnalyzer.AIHealOption heal =
+                aiAnalyzer.FindBestHealPlay(
+                    card,
+                    Manager.Instance.enemy
+                );
+
+            if (heal == null)
+                return false;
+        }
+
+        if (card.effectType == EffectType.Shield)
+        {
+            AIAnalyzer.AIShieldOption shield =
+                aiAnalyzer.FindBestShieldPlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                );
+
+            if (shield == null)
+                return false;
+        }
+
+        if (card.effectType == EffectType.DamageArea)
+        {
+            AIAnalyzer.AIAreaOption area =
+                aiAnalyzer.FindBestDamageAreaPlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                );
+
+            if (area == null)
+                return false;
+        }
+
+        if (card.effectType == EffectType.Petrify)
+        {
+            AIAnalyzer.AIPetrifyOption petrify =
+                aiAnalyzer.FindBestPetrifyPlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                );
+
+            if (petrify == null)
+                return false;
+        }
+
+        if (card.effectType == EffectType.Terrain)
+        {
+            AIAnalyzer.AITerrainOption Terrain = 
+                aiAnalyzer.FindBestTerrainPlay(
+                    card,
+                    Manager.Instance.enemy,
+                    Manager.Instance.player
+                    );
+
+            if (Terrain == null)
+                return false;
+        }
+
+
 
         return true;
     }
@@ -226,23 +447,117 @@ public class IAEnemy : MonoBehaviour
         switch (card.effectType)
         {
             case EffectType.Damage:
-                if (BoardManager.Instance.EnemyInRange(Owner.AI)) score += 30;
-                score += card.value;
+
+                AIAnalyzer.AIAttackOption attack =
+                    aiAnalyzer.FindBestDamagePlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (attack == null)
+                    return int.MinValue;
+
+                score += attack.score;
+
                 break;
 
             case EffectType.SpawnUnit:
-                if (BoardManager.Instance.HasBoardSpace(Owner.AI)) score += 25;
-                score += card.value;
+
+                AIAnalyzer.AISpawnOption spawn =
+                    aiAnalyzer.FindBestSpawnPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (spawn == null)
+                    return int.MinValue;
+
+                score += 25 + spawn.score;
+
                 break;
 
             case EffectType.Heal:
-                if (BoardManager.Instance.CommanderHealthBelow(Owner.AI, 0.6f)) score += 35;
-                score += card.value;
+
+                AIAnalyzer.AIHealOption heal =
+                    aiAnalyzer.FindBestHealPlay(
+                        card,
+                        Manager.Instance.enemy
+                    );
+
+                if (heal == null)
+                    return int.MinValue;
+
+                score += heal.score;
+
+                break;
+
+            case EffectType.Shield:
+
+                AIAnalyzer.AIShieldOption shield =
+                    aiAnalyzer.FindBestShieldPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (shield == null)
+                    return int.MinValue;
+
+                score += shield.score;
+
                 break;
 
             case EffectType.Trap:
                 score += 20;
                 break;
+
+            case EffectType.DamageArea:
+
+                AIAnalyzer.AIAreaOption area =
+                    aiAnalyzer.FindBestDamageAreaPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (area == null)
+                    return int.MinValue;
+
+                score += area.score;
+
+                break;
+
+            case EffectType.Petrify:
+
+                AIAnalyzer.AIPetrifyOption petrify =
+                    aiAnalyzer.FindBestPetrifyPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                if (petrify == null)
+                    return int.MinValue;
+
+                score += petrify.score;
+
+                break;
+
+            case EffectType.Terrain:
+                {
+                    AITerrainOption terrain = aiAnalyzer.FindBestTerrainPlay(
+                        card,
+                        Manager.Instance.enemy,
+                        Manager.Instance.player
+                    );
+
+                    if (terrain != null)
+                        score += 20 + terrain.score;
+
+                    break;
+                }
         }
 
         if (card.cost > currentMana) score -= 1000;

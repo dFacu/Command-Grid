@@ -20,14 +20,14 @@ public class DeckManager : MonoBehaviour
     private bool startBattleRun = true;
 
 
-    void Start()
+    /*void Start()
     {
         //Load all card assets from the Resources folder
         CardSO[] cards = Resources.LoadAll<CardSO>("Cards");
 
         //Add the loaded cards to the allCards list
         allCards.AddRange(cards);
-    }
+    }*/
 
     private void Awake()
     {

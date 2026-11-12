@@ -32,9 +32,17 @@ public class DrawPileManager : MonoBehaviour
 
     public void MakeDrawPile(List<CardSO> cardsToAdd)
     {
+        drawPile.Clear();
+
         drawPile.AddRange(cardsToAdd);
+
+        drawPile.RemoveAll(card => card == null);
+
         Utility.Shuffle(drawPile);
+
         UpdateDrawPileCount();
+
+        Debug.Log($"Mazo del jugador mezclado: {drawPile.Count} cartas.");
     }
 
     public void BattleSetup(int numberOfCardsToDraw, int setMaxHandSize)
@@ -52,14 +60,23 @@ public class DrawPileManager : MonoBehaviour
             RefillDeckFromDiscard();
         }
 
-        if (currentHandSize < maxHandSize)
-        {
-            CardSO nextCard = drawPile[currentIndex];
-            handManager.AddCardToHand(nextCard);
-            drawPile.RemoveAt(currentIndex);
-            UpdateDrawPileCount();
-            if (drawPile.Count > 0) currentIndex %= drawPile.Count;
-        }
+        if (drawPile.Count == 0)
+            return;
+
+        currentHandSize = handManager.cardsInHand.Count;
+
+        if (currentHandSize >= maxHandSize)
+            return;
+
+        CardSO nextCard = drawPile[0];
+
+        handManager.AddCardToHand(nextCard);
+
+        drawPile.RemoveAt(0);
+
+        currentHandSize = handManager.cardsInHand.Count;
+
+        UpdateDrawPileCount();
     }
 
     private void RefillDeckFromDiscard()
