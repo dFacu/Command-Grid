@@ -36,6 +36,7 @@ public class IAEnemy : MonoBehaviour
     private void Update()
     {
         textLifeComander.text = Manager.Instance.enemy.units[0].GetComponent<Unit>().health.ToString();
+        currentMana = Manager.Instance.enemy.currentPoints;
         textPoint.text = Manager.Instance.enemy.currentPoints.ToString();
     }
 
@@ -278,13 +279,26 @@ public class IAEnemy : MonoBehaviour
 
         if (success)
         {
-            currentMana -= card.cost;
+            int finalCost = sourceUnit != null
+                ? sourceUnit.GetCardCost(card)
+                : card.cost;
+
+            Manager.Instance.enemy.SpendPoints(finalCost);
+            currentMana = Manager.Instance.enemy.currentPoints;
+
+            // Registrar las pasivas después de ejecutar correctamente.
+            if (sourceUnit != null)
+                sourceUnit.RegisterElementalCard(card);
+
             deckManager.Discard(card);
             hand.Remove(card);
 
             lastCardPlayed = true;
 
-            Debug.Log($"IA ejecutó correctamente: {card.cardName}");
+            Debug.Log(
+                $"IA ejecutó correctamente: {card.cardName}. " +
+                $"Coste pagado: {finalCost}. Maná restante: {currentMana}"
+            );
         }
 
         yield return new WaitForSeconds(playDelay);
@@ -343,7 +357,13 @@ public class IAEnemy : MonoBehaviour
 
     private bool CanPlayCard(CardSO card)
     {
-        if (card.cost > currentMana)
+        Unit sourceUnit = GetSourceUnitForCard(card);
+
+        int finalCost = sourceUnit != null
+            ? sourceUnit.GetCardCost(card)
+            : card.cost;
+
+        if (finalCost > currentMana)
             return false;
 
         if (card.effectType == EffectType.SpawnUnit)

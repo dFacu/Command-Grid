@@ -23,7 +23,7 @@ MonoBehaviour:
     Unidades sin elemento Agua: al moverse dentro de las casillas afectadas,
     su movimiento se reduce a la mitad'
   effectType: 7
-  elements: 2
+  elements: 3
   targetElement: 0
   value: 2
   distance: 4
@@ -31,8 +31,9 @@ MonoBehaviour:
   areaShape: 2
   areaSize: 3
   effectForFavoredElement: 1
-  favoredElement: 2
+  favoredElement: 3
   effectForOtherElements: 3
   excludedElement: 2
   prefab: {fileID: 7292251082018233747, guid: ad80142444ff24046a05f0c102f5ef21, type: 3}
   rarity: Rara
+  particlePrefab: {fileID: 0}

@@ -194,6 +194,7 @@ public class CardExecutor : MonoBehaviour
         return true;
     }
 
+
     private bool HealUnit(CardSO card, Unit target, PlayerResources owner, Unit sourceUnit)
     {
         if (card == null || target == null || owner == null)
@@ -211,16 +212,6 @@ public class CardExecutor : MonoBehaviour
             Debug.Log("Una unidad petrificada no puede usar cartas.");
             return false;
         }
-
-        // Validar el elemento de quien lanza la carta.
-       /* if (sourceUnit.element != card.HasElement)
-        {
-            Debug.Log(
-                $"{sourceUnit.name} no puede usar {card.cardName}. " +
-                $"Elemento requerido: {card.HasElement}."
-            );
-            return false;
-        }*/
 
         // La curación solo puede afectar unidades aliadas.
         if (target.owner == null ||
@@ -245,18 +236,37 @@ public class CardExecutor : MonoBehaviour
             return false;
         }
 
-        // Aplicar curación.
-        target.Heal(card.value);
+        // Calcular la curación.
+        int healingAmount = card.value;
 
-        Vector3 newVector3 = new Vector3(target.transform.position.x, target.transform.position.y - 0.2f, target.transform.position.z);
+        // Pasiva de Kalyar: Corriente Vital.
+        if (sourceUnit.hasKalyarPassive &&
+            EffectZone.IsUnitInsideWaterZone(sourceUnit))
+        {
+            healingAmount += 1;
+
+            Debug.Log("¡Corriente Vital! Kalyar potencia la curación +1.");
+        }
+
+        // Aplicar curación.
+        target.Heal(healingAmount);
+
+        Vector3 newVector3 = new Vector3(
+            target.transform.position.x,
+            target.transform.position.y - 0.2f,
+            target.transform.position.z
+        );
+
         PlayCardEffect(card, newVector3);
+
         Debug.Log(
             $"{sourceUnit.name} usó {card.cardName} para curar a " +
-            $"{target.name} por {card.value} puntos."
+            $"{target.name} por {healingAmount} puntos."
         );
 
         return true;
     }
+
 
     private bool PlaceTrap(CardSO card, TileClick tile, PlayerResources owner, Unit sourceUnit)
     {
@@ -564,11 +574,24 @@ public class CardExecutor : MonoBehaviour
         Destroy(effect, 5f);
     }
 
+
     private int CalculateDamage(CardSO card, Unit sourceUnit)
     {
         int bonus = EffectZone.GetTotalAttackBonus(sourceUnit);
+
+        // Pasiva del Heraldo: Afinidad Ígnea.
+        if (sourceUnit != null &&
+            sourceUnit.hasHeraldoPassive &&
+            card.elements == Element.Fire)
+        {
+            bonus += 1;
+
+            Debug.Log("¡Afinidad Ígnea! El Heraldo aumenta su daño en +1.");
+        }
+
         return card.value + bonus;
     }
+
 
     private bool ApplyKnockback(
         CardSO card,

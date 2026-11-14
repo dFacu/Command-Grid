@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: Era de piedra
   type: 1
   image: {fileID: 21300000, guid: 30cb228664bf3234f8c5ec2c50285415, type: 3}
-  cost: 1
+  cost: 5
   description: 'Efecto: convierte en piedra a los enemigos alcanzados durante 3 turnos,
     impidiendo que se muevan o utilicen habilidades.'
   effectType: 1

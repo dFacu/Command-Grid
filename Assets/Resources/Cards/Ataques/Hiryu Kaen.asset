@@ -30,5 +30,5 @@ MonoBehaviour:
   effectForOtherElements: 0
   excludedElement: 0
   prefab: {fileID: 0}
-  rarity: CC
+  rarity: C
   particlePrefab: {fileID: 2360655870356088562, guid: 57a776ff377f3c44e8403e2067a4d41f, type: 3}

@@ -26,6 +26,28 @@ public class Unit : MonoBehaviour
 
     public int shield = 0;
 
+
+    [Header("Pasivas de Kalyar")]
+    public bool hasKalyarPassive;
+
+    [Header("Pasivas de Heraldo")]
+    public bool hasHeraldoPassive;
+    // Control de activación por vuelta.
+    public bool heraldoPassiveUsed;
+
+    [Header("Pasivas del Orquestador")]
+    public bool hasOrquestadorPassive;
+
+    // Convergencia Arcana
+    public bool convergenceUsed;
+
+    // Resonancia Elemental
+    public bool resonanceAvailable;
+    public Element firstResonanceElement;
+
+    [Header("Pasivas del Sabio")]
+    public bool hasSagePassive;
+
     private void Start()
     {
         health = maxHealth;
@@ -56,15 +78,33 @@ public class Unit : MonoBehaviour
         transform.position = pos;
         currentCell = cell;
         hasMovedThisTurn = true;
+
+        CheckHeraldoReaction();
     }
 
     public void TakeDamage(int dmg)
     {
-        health -= dmg;
+        if (dmg <= 0)
+            return;
+
+        int remainingDamage = dmg;
+
+        if (shield > 0)
+        {
+            int absorbed = Mathf.Min(shield, remainingDamage);
+
+            shield -= absorbed;
+            remainingDamage -= absorbed;
+        }
+
+        health -= remainingDamage;
+
         if (health <= 0)
         {
+            health = 0;
+
             Debug.Log($"{gameObject.name} ha sido derrotado");
-           // BoardManager.Instance.RemoveUnitAt(currentCell);
+
             Destroy(gameObject);
         }
     }
@@ -162,6 +202,115 @@ public class Unit : MonoBehaviour
         }
 
         transform.position = targetPosition;
+
+        CheckHeraldoReaction();
+    }
+
+    public void CheckHeraldoReaction()
+    {
+        if (owner == null)
+            return;
+
+        // Buscar todas las unidades activas.
+        Unit[] allUnits = FindObjectsByType<Unit>(
+            FindObjectsSortMode.None
+        );
+
+        foreach (Unit heraldo in allUnits)
+        {
+            if (heraldo == null || heraldo == this)
+                continue;
+
+            if (!heraldo.hasHeraldoPassive)
+                continue;
+
+            if (heraldo.owner == null || heraldo.owner == owner)
+                continue;
+
+            if (heraldo.heraldoPassiveUsed)
+                continue;
+
+            // Distancia entre las casillas.
+            int distance =
+                Mathf.Abs(currentCell.x - heraldo.currentCell.x) +
+                Mathf.Abs(currentCell.y - heraldo.currentCell.y);
+
+            // Adyacencia ortogonal.
+            if (distance == 1)
+            {
+                heraldo.heraldoPassiveUsed = true;
+
+                TakeDamage(1);
+
+                Debug.Log(
+                    $"¡Llama Reactiva! {heraldo.name} infligió " +
+                    $"1 punto de daño a {name}."
+                );
+            }
+        }
+    }
+
+    public int GetCardCost(CardSO card)
+    {
+        int finalCost = card.cost;
+
+        if (!hasOrquestadorPassive)
+            return finalCost;
+
+        // Las cartas All no activan ni consumen Resonancia.
+        if (card.elements == Element.All)
+            return finalCost;
+
+        // Si hay resonancia disponible y la carta es de
+        // un elemento diferente al primero utilizado.
+        if (resonanceAvailable &&
+            card.elements != firstResonanceElement)
+        {
+            finalCost = Mathf.Max(0, finalCost - 1);
+        }
+
+        return finalCost;
+    }
+
+    public void RegisterElementalCard(CardSO card)
+    {
+        if (!hasOrquestadorPassive || card == null)
+            return;
+
+        // Las cartas All no participan de las pasivas.
+        if (card.elements == Element.All)
+            return;
+
+        // Primera carta elemental de esta vuelta.
+        if (!convergenceUsed)
+        {
+            convergenceUsed = true;
+            firstResonanceElement = card.elements;
+            resonanceAvailable = true;
+
+            owner.currentPoints = Mathf.Min(
+                owner.currentPoints + 1,
+                owner.maxPoints
+            );
+
+            Debug.Log(
+                $"{name}: ¡Convergencia Arcana! " +
+                "El jugador obtiene 1 punto de maná."
+            );
+
+            return;
+        }
+
+        // Una carta de elemento diferente consume la resonancia.
+        if (resonanceAvailable &&
+            card.elements != firstResonanceElement)
+        {
+            resonanceAvailable = false;
+
+            Debug.Log(
+                $"{name}: ¡Resonancia Elemental consumida!"
+            );
+        }
     }
 }
 

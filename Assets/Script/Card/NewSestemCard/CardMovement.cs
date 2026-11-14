@@ -182,9 +182,13 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                 {
                     Unit sourceUnit = Manager.Instance.player.selectedUnit;
 
-                    if (sourceUnit != null && sourceUnit.isPetrified)
+                    int finalCost = sourceUnit != null
+                        ? sourceUnit.GetCardCost(card)
+                        : card.cost;
+
+                    if (Manager.Instance.player.currentPoints < finalCost)
                     {
-                        Debug.Log("No podés usar una unidad petrificada para esta carta.");
+                        Debug.Log("No tenés suficientes puntos para jugar esta carta.");
                         return;
                     }
 
@@ -193,108 +197,32 @@ public class CardMovement : MonoBehaviour, IDragHandler, IPointerDownHandler, IP
                         cell,
                         target,
                         Manager.Instance.player,
-                         Manager.Instance.enemy,
-                         Manager.Instance.player.selectedUnit
-                         
+                        Manager.Instance.enemy,
+                        sourceUnit
                     );
 
                     if (ejecutada)
                     {
+                        // Pagar el coste calculado.
+                        Manager.Instance.player.SpendPoints(finalCost);
+
+                        // Registrar las pasivas del Orquestador.
+                        if (sourceUnit != null)
+                            sourceUnit.RegisterElementalCard(card);
+
                         HandManager handManager = FindAnyObjectByType<HandManager>();
+
                         handManager.cardsInHand.Remove(gameObject);
                         handManager.UpdateHandVisuals();
-                        Manager.Instance.player.currentPoints -= card.cost;
+
                         Destroy(gameObject);
 
-                        Debug.Log("Carta ejecutada correctamente.");
+                        Debug.Log(
+                            $"Carta ejecutada correctamente. Coste pagado: {finalCost}"
+                        );
                     }
                 } 
                 
-                /*
-                 if (cell != null)
-                 {
-
-
-
-
-
-
-
-                     if ((card.effectType == EffectType.SpawnUnit))   // Invoca una unidad 
-                     {
-                         Vector2Int targetPos = cell.cellCoords;
-
-
-                         if (gridManager.AddObjectToGrid(GetComponent<CardUI>().Prefab, targetPos, Manager.Instance.player))
-                         {
-                             HandManager handManager = FindAnyObjectByType<HandManager>();
-                             handManager.cardsInHand.Remove(gameObject);
-                             handManager.UpdateHandVisuals();
-                             Debug.Log("character");
-                             DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                             discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
-                             Manager.Instance.player.currentPoints -= card.cost;
-                             Destroy(gameObject);
-                         }
-                     }
-                     else if (card.effectType == EffectType.Trap)
-                     {
-                         cell.hasTrap = true;
-                         cell.trapDamage = card.value;
-                         Renderer cellRender = cell.GetComponent<Renderer>();
-                         cellRender.material.color = Color.azure;
-                         Debug.Log($"Trampa colocada en {cell.name} con daño {cell.trapDamage}");
-                         DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                         discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
-
-                         HandManager handManager = FindAnyObjectByType<HandManager>();
-                         handManager.cardsInHand.Remove(gameObject);
-                         handManager.UpdateHandVisuals();
-                         Manager.Instance.player.currentPoints -= card.cost;
-                         Destroy(gameObject);
-                     }
-
-                 }
-                 else
-                 {
-                     if (card.effectType == EffectType.Damage)
-                     {
-                         Unit target = hit.collider.GetComponent<Unit>();
-
-                         if (target != null)
-                         {
-                             // Posición de la unidad seleccionada
-                             Vector3 attackerPos = Manager.Instance.player.selectedUnit.transform.position;
-                             Vector3 targetPos = target.transform.position;
-
-                             // Calcular distancia
-                             float distance = Vector3.Distance(attackerPos, targetPos);
-
-                             // Chequear si está dentro del rango permitido por la carta
-                             if (distance <= card.distance)
-                             {
-                                 target.TakeDamage(card.value);
-                                 Debug.Log($"{card.name} infligió {card.value} de daño a {target.name} (distancia: {distance})");
-                                 DiscardManager discardManager = FindAnyObjectByType<DiscardManager>();
-                                 discardManager.AddToDiscard(GetComponent<CardUI>().cardData);
-
-                                 HandManager handManager = FindAnyObjectByType<HandManager>();
-                                 handManager.cardsInHand.Remove(gameObject);
-                                 handManager.UpdateHandVisuals();
-                                 Manager.Instance.player.currentPoints -= card.cost;
-                                 Destroy(gameObject);
-
-                             }
-                             else
-                             {
-                                 Debug.Log($"{card.name} no puede atacar: objetivo fuera de rango (distancia: {distance}, rango: {card.distance})");
-                             }
-                         }
-                     }
-
-
-                 }
-               */
             }
 
             TransitionToState0();

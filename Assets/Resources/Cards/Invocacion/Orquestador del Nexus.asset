@@ -16,9 +16,9 @@ MonoBehaviour:
   type: 0
   image: {fileID: 21300000, guid: e4040b00fb250484a9c23848d6d3ec24, type: 3}
   cost: 2
-  description: "Invocas al terreno al Orquestador del Nexus. Con vida intermedia
-    y gran movilidad, se posiciona estrat\xE9gicamente para desplegar cartas de control
-    y dominar el flujo de la batalla."
+  description: "Elemento All \xB7 Soporte / Estrategia\n\nArmoniza las fuerzas elementales
+    y convierte cada hechizo en una nueva oportunidad. Su dominio del Nexus genera
+    man\xE1 y reduce el coste de combinar distintos elementos."
   effectType: 0
   elements: 1
   targetElement: 0

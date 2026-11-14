@@ -281,4 +281,28 @@ public class EffectZone : MonoBehaviour
 
         originalColors.Clear();
     }
+
+    public static bool IsUnitInsideWaterZone(Unit unit)
+    {
+        if (unit == null)
+            return false;
+
+        EffectZone[] zones =
+            FindObjectsByType<EffectZone>(FindObjectsSortMode.None);
+
+        foreach (EffectZone zone in zones)
+        {
+            if (zone == null || zone.cardData == null)
+                continue;
+
+            // Comprobamos que sea una zona de Agua.
+            if (zone.cardData.favoredElement != Element.Water)
+                continue;
+
+            if (zone.ContainsUnit(unit))
+                return true;
+        }
+
+        return false;
+    }
 }

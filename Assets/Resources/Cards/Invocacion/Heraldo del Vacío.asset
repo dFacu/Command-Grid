@@ -16,9 +16,9 @@ MonoBehaviour:
   type: 0
   image: {fileID: 21300000, guid: 635b4e5c42c07cc4992cdd0e4b48d824, type: 3}
   cost: 2
-  description: "Invocas al terreno al Heraldo del Vac\xEDo. Con poca vida y movilidad
-    limitada, su verdadero poder reside en las cartas de da\xF1o que desata, convirtiendo
-    cada ataque en un eco del abismo. "
+  description: "Su llama castiga a quienes se atreven a acercarse. Cada movimiento
+    enemigo puede despertar una reacci\xF3n devastadora, mientras su fuego consume
+    todo a su paso."
   effectType: 0
   elements: 0
   targetElement: 0

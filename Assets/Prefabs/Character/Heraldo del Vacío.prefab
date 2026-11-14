@@ -254,12 +254,16 @@ MonoBehaviour:
   HasElement: 2
   maxHealth: 6
   health: 0
-  movementRange: 1
+  movementRange: 2
   marker: {fileID: 513453185102261487}
   hasMovedThisTurn: 0
   currentCell: {x: 0, y: 0}
   isPetrified: 0
   petrifiedTurns: 0
+  shield: 0
+  hasKalyarPassive: 0
+  hasHeraldoPassive: 1
+  heraldoPassiveUsed: 0
 --- !u!23 &8443716739738424933
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -18,10 +18,10 @@ MonoBehaviour:
   cost: 2
   description: Invoca un mago al tablero.
   effectType: 2
-  elements: 1
+  elements: 0
   targetElement: 0
   value: 3
-  distance: 2
+  distance: 1
   duration: 0
   areaShape: 0
   areaSize: 0
@@ -30,5 +30,5 @@ MonoBehaviour:
   effectForOtherElements: 0
   excludedElement: 0
   prefab: {fileID: 0}
-  rarity: 
+  rarity: C
   particlePrefab: {fileID: 5169803093150543574, guid: c2891704bd6413946ab8af725fb72212, type: 3}

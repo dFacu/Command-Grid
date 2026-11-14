@@ -16,7 +16,9 @@ MonoBehaviour:
   type: 0
   image: {fileID: 21300000, guid: fa9ef7e64c5c79d45840c7576c6c94cf, type: 3}
   cost: 2
-  description: 'Invoca unidad '
+  description: Inquebrantable como la tierra misma, protege a quienes luchan a su
+    lado. Su presencia fortalece las defensas del equipo y convierte la paciencia
+    en una poderosa barrera.
   effectType: 0
   elements: 5
   targetElement: 0

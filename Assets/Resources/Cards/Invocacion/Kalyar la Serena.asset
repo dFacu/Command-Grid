@@ -16,8 +16,9 @@ MonoBehaviour:
   type: 0
   image: {fileID: 21300000, guid: 611dd6f0126629146a52854719fa2865, type: 3}
   cost: 2
-  description: Invocas al terreno a Kalyar la Serena. Con su calma inquebrantable,
-    obtienes el control del tablero y neutralizas el caos de tus enemigos.
+  description: "Elemento Agua \xB7 Soporte / Estrategia\n\nSu dominio del agua le
+    permite sanar heridas y fortalecer la recuperaci\xF3n de sus aliados. All\xED
+    donde fluye su magia, la vida encuentra una nueva oportunidad."
   effectType: 0
   elements: 0
   targetElement: 0
